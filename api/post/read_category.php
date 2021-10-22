@@ -11,11 +11,14 @@
     $db = $database->connect();
 
     // Instantiate Listing Item object
-    $item = new Item($db);
+    $items = new Item($db);
 
-    // Listing items query
-    $result = $item->read();
-    
+    // Get Category from URL
+    $items->category = isset($_GET['category']) ? $_GET['category'] : die();
+
+    // Get Category Item(s)
+    $result = $items->read_category();
+
     //Get row count
     $num = $result->rowCount();
 
