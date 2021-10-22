@@ -39,7 +39,8 @@
                 'endDateTime' => $endDateTime,
                 'startingPrice' => $startingPrice,
                 'reservePrice' => $reservePrice,
-                'latestBidID' => $bidID
+                'latestBidID' => $bidID,
+                'image' => $image,
             );
 
             // Push to "data"

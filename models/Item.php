@@ -16,6 +16,7 @@
         public $startingPrice;
         public $reservePrice;
         public $latestBidID;
+        public $image;
 
         // Constructor with DB
         public function __construct($db) {
@@ -36,7 +37,8 @@
                 i.category,
                 i.endDateTime,
                 i.startingPrice,
-                i.bidID
+                i.bidID,
+                i.image
             FROM
                 ' . $this->items_table . ' i, ' . $this->users_table . ' u
             WHERE
@@ -66,7 +68,8 @@
                 i.category,
                 i.endDateTime,
                 i.startingPrice,
-                i.bidID
+                i.bidID,
+                i.image
             FROM
                 ' . $this->items_table . ' i, ' . $this->users_table . ' u
             WHERE
@@ -84,5 +87,58 @@
             $stmt->execute();
 
             return $stmt;
+        }
+
+        // Create Listing Items
+        public function create() {
+            // Create query
+            $query = 'INSERT INTO ' . $this->items_table . '
+                SET
+                    title = :title,
+                    description = :description,
+                    category = :category,
+                    startingPrice = :startingPrice,
+                    reservePrice = :reservePrice,
+                    startDateTime = :startDateTime,
+                    endDateTime = :endDateTime,
+                    image = :image,
+                    userID = :userID
+
+            ';
+
+            //Prepare Statement
+            $stmt = $this->conn->prepare($query);
+        
+            // Clean Data
+            $this->title = htmlspecialchars(strip_tags($this->title));
+            $this->description = htmlspecialchars(strip_tags($this->description));
+            $this->category = htmlspecialchars(strip_tags($this->category));
+            $this->startingPrice = htmlspecialchars(strip_tags($this->startingPrice));
+            $this->reservePrice = htmlspecialchars(strip_tags($this->reservePrice));
+            $this->startDateTime = htmlspecialchars(strip_tags($this->startDateTime));
+            $this->endDateTime = htmlspecialchars(strip_tags($this->endDateTime));
+            $this->image = htmlspecialchars(strip_tags($this->image));
+            $this->userID = htmlspecialchars(strip_tags($this->userID));
+
+            // Bind Data
+            $stmt->bindParam(':title', $this->title);
+            $stmt->bindParam(':description', $this->description);
+            $stmt->bindParam(':category', $this->category);
+            $stmt->bindParam(':startingPrice', $this->startingPrice);
+            $stmt->bindParam(':reservePrice', $this->reservePrice);
+            $stmt->bindParam(':startDateTime', $this->startDateTime);
+            $stmt->bindParam(':endDateTime', $this->endDateTime);
+            $stmt->bindParam(':image', $this->image);
+            $stmt->bindParam(':userID', $this->userID);
+
+            // Execute query
+            if ($stmt->execute()) {
+                return true;
+            }
+
+            // Print error if something goes wrong
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
         }
     }
