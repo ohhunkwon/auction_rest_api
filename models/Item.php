@@ -70,11 +70,11 @@
                 i.startingPrice,
                 i.bidID,
                 i.image,
-                u.firstname
+                u.firstName
             FROM
                 ' . $this->items_table . ' i, ' . $this->users_table .' u
             WHERE
-                i.itemID = ?
+                i.itemID = ? AND u.userID = i.userID
             LIMIT 0, 1';
 
             // Prepare Statement
@@ -216,6 +216,31 @@
             $stmt->bindParam(':startDateTime', $this->startDateTime);
             $stmt->bindParam(':endDateTime', $this->endDateTime);
             $stmt->bindParam(':image', $this->image);
+            $stmt->bindParam(':itemID', $this->itemID);
+
+            // Execute query
+            if ($stmt->execute()) {
+                return true;
+            }
+
+            // Print error if something goes wrong
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
+        }
+
+        // Delete Listing Item
+        public function delete() {
+            // Create query
+            $query = 'DELETE FROM ' . $this->items_table . ' WHERE itemID = :itemID';
+
+            //Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Clean data
+            $this->itemID = htmlspecialchars(strip_tags($this->itemID));
+
+            // Bind data
             $stmt->bindParam(':itemID', $this->itemID);
 
             // Execute query
