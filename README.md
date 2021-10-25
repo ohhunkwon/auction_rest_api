@@ -1,1 +1,1 @@
-# PHP REST API for the Database Auction Site Group Project
+# PHP REST API for Db Project
