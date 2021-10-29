@@ -8,9 +8,11 @@
 
         // User Properties
         public $userID;
-        public $firstName;
-        public $lastName;
+        public $username;
         public $email;
+        public $pwhash;
+        public $firstName;
+        public $lastName;  
         public $role;
         public $createdAt;
         public $updatedAt;

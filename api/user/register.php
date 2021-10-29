@@ -16,15 +16,14 @@
     // Instantiate User object
     $user = new User($db);
 
-    // Validation
+    // Validation of data entry
     $data = $_POST;
 
-    if (empty($data['userID']) || 
+    if (empty($data['email']) ||
         empty($data['pw']) ||
         empty($data['pwconfirm']) ||
         empty($data['firstName']) ||
         empty($data['lastName']) ||
-        empty($data['email']) ||
         empty($data['role'])) {
         die('Please fill in all required fields!');
         }
