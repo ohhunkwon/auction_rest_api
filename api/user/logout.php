@@ -16,16 +16,14 @@
     // Instantiate User object
     $user = new User($db);
 
-    // Use session to verify User is logged in
+    // Close session
     session_start();
     if (isset($_SESSION['userID'])) {
-    // Show User listings (only if role == seller)
-    $query =     
+        $_SESSION = array();
+        session_destroy();
     }
-    else {
-        echo "Please login";
-        // Redirect to login page
-        $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
-        dirname($_SERVER['PHP_SELF']) . '/login.php';
-        header('Location: ' . $loginURL);
-    }
+
+    // Redirect to login page
+    $indexURL = 'http://' . $_SERVER['HTTP_HOST'] .
+    dirname($_SERVER['PHP_SELF']) . '/index.php';
+    header('Location: ' . $indexURL);

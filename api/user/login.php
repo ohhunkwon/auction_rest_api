@@ -21,20 +21,28 @@
 
     if (empty($data['username']) ||
         empty($data['pw']) || {
-        die('Please fill in all required fields!');
+        echo 'Please fill in all required fields!';
+        // Redirect to login page (is this necessary/is there a better way?)
+        $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
+        dirname($_SERVER['PHP_SELF']) . '/login.php';
+        header('Location: ' . $loginURL);
         }
 
-    // Verify login
+    // Verify login, start session and redirect to index.php
 
-    $query = "SELECT userID, username FROM User " . WHERE user.username = '$username' AND " . "pw = SHA('$pw')";
+    $query = "SELECT userID, username FROM User " . "WHERE user.username = '$username' AND " . "pw = SHA('$pw')";
     $data = mysqli_query($conn, $query);
     if (mysqli_num_rows($data) == 1) {
         $row = mysqli_fetch_array($data);
-        setcookie('userID', $row['userID']);
-        setcookie('username',$row['username']);
+        $_SESSION['userID'] = $row['userID'];
+        $_SESSION['username'] = $row['username'];
         $indexURL = 'http://' . $_SERVER['HTTP_HOST'] .
         dirname($_SERVER['PHP_SELF']) . '/index.php';
         header('Location: ' . $indexURL);
     } else {
         echo 'Invalid email or password.';
+        // Redirect to login page
+        $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
+        dirname($_SERVER['PHP_SELF']) . '/login.php';
+        header('Location: ' . $loginURL);
     }
