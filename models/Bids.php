@@ -2,16 +2,16 @@
   class Bids {//Do i add a check where, the latest bid,has to be rejected if its lower, or is that front end??
     // DB stuff
     private $conn;
-    private $bids_table = 'bids';
-    private $items_table = 'items';
+    private $bids_table = 'Bids';
+    private $items_table = 'Items';
 
 
     //bid properties
-    public $bid_ID;
-    public $created_at;
+    public $bidID;
+    public $createdAt;
     public $amount;
-    public $user_Id;
-    public $item_id;
+    public $userID;
+    public $itemID;
 
     // Constructor with DB
       public function __construct($db) {
@@ -29,8 +29,8 @@
           b.itemID
         FROM
             ' . $this->bids_table . ' b
-        INNER JOIN ' . $items_table . ' i ON i.bidID = b.bidID 
-        WHERE b.itemID = ? ';
+        INNER JOIN ' . $this->items_table . ' i ON i.bidID = b.bidID 
+        WHERE b.itemID = ?';
 
         // Prepare Statement
         $stmt = $this->conn->prepare($query);
