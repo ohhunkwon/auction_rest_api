@@ -69,19 +69,25 @@
         // Delete Listing Item
         public function delete() {
             // Create query
-            $query = 'DELETE FROM ' . $this->watch_table . ' WHERE itemID = :itemID';
+            $query = 'DELETE FROM ' . $this->watch_table . ' 
+                    WHERE itemID = :itemID AND userID = :userID';
 
             //Prepare Statement
             $stmt = $this->conn->prepare($query);
 
             // Clean data
             $this->itemID = htmlspecialchars(strip_tags($this->itemID));
+            $this->userID = htmlspecialchars(strip_tags($this->userID));
 
             // Bind data
             $stmt->bindParam(':itemID', $this->itemID);
+            $stmt->bindParam(':userID', $this->userID);
+
+            $stmt->execute();
+            $count = $stmt->rowCount();
 
             // Execute query
-            if ($stmt->execute()) {
+            if ($count > 0) {
                 return true;
             }
 
