@@ -45,29 +45,65 @@
         
     }
 
-  // Delete bids
-  public function delete() {
-        // Create query
-        $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
+    // Get latest bid price
+    public function get_highest_bid($ID) {
+      //create query  //modify!!!!!!!!!!!!!!!!!!
+      $query = 'SELECT
+        highestPrice
+      FROM
+          ' . $this->items_table . '
+      WHERE itemID = ?';
 
-        // Prepare statement
-        $stmt = $this->conn->prepare($query);
+      // Prepare Statement
+      $stmt = $this->conn->prepare($query);
 
-        // Clean data
-        $this->id = htmlspecialchars(strip_tags($this->id));
+      // Bind ID
+      $stmt->bindParam(1, $ID);
 
-        // Bind data
-        $stmt->bindParam(':id', $this->id);
+      // Execute query
+      $stmt->execute();
 
-        // Execute query
-        if($stmt->execute()) {
-          return true;
-        }
+      return $stmt;
+      
+  }
 
-        // Print error if something goes wrong
-        printf("Error: %s.\n", $stmt->error);
+    // Create Bid
+  public function create() {
+    // Create query
+    $query = 'INSERT INTO ' . $this->bids_table . '
+        SET
+          bidID = :bidID,
+          createdAt = :createdAt,
+          amount = :amount,
+          userID = :userID,
+          itemID = :itemID
+    ';
 
-        return false;
+      //Prepare Statement
+      $stmt = $this->conn->prepare($query);
+
+      // Clean Data
+      $this->bidID = htmlspecialchars(strip_tags($this->bidID));
+      $this->createdAt = htmlspecialchars(strip_tags($this->createdAt));
+      $this->amount = htmlspecialchars(strip_tags($this->amount));
+      $this->userID = htmlspecialchars(strip_tags($this->userID));
+      $this->itemID = htmlspecialchars(strip_tags($this->itemID));
+
+      // Bind Data
+      $stmt->bindParam(':bidID', $this->bidID);
+      $stmt->bindParam(':createdAt', $this->createdAt);
+      $stmt->bindParam(':amount', $this->amount);
+      $stmt->bindParam(':userID', $this->userID);
+      $stmt->bindParam(':itemID', $this->itemID);
+
+      // Execute query
+      if ($stmt->execute()) {
+        return true;
+      }
+      // Print error if something goes wrong
+      printf("Error: %s.\n", $stmt->error);
+
+      return false;
   }
 
 
