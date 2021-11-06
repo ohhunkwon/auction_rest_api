@@ -273,13 +273,14 @@
             FROM
                 ' . $this->items_table . ' i
             WHERE
-                i.title LIKE "%?%"';
+                i.title LIKE ?';
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);
 
             // Bind search query
-            $stmt->bindParam(1, $this->input);
+            $likeString = '%' . $this->input . '%';
+            $stmt->bindParam(1, $likeString);
 
             // Execute query
             $stmt->execute();
