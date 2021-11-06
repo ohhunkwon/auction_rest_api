@@ -18,6 +18,7 @@
         public $latestBidID;
         public $image;
         public $firstName;
+        public $input;
 
         // Constructor with DB
         public function __construct($db) {
@@ -252,5 +253,35 @@
             printf("Error: %s.\n", $stmt->error);
 
             return false;
+        }
+
+        // Get Items of that match a specific search query
+        public function read_search() {
+            // Create query
+            $query = 'SELECT 
+                *
+            FROM
+                ' . $this->items_table . '
+            WHERE ';
+
+            $word_searched = "";//The original term that the user is searching for, to be used for throwing back an error
+            
+            $search_words = explode(' ', $this->input);
+
+            foreach ($search_words as $word){
+                $query .= "title LIKE '%" . $word . "%' OR "; 
+                $word_searched .= $word. ' ';
+            }
+
+            $query = substr_replace($query, "", -4);
+            $word_searched = substr_replace($word_searched, "", -1);
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
         }
     }
