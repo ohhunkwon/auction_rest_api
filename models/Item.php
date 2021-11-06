@@ -259,28 +259,25 @@
         public function read_search() {
             // Create query
             $query = 'SELECT 
-                i.itemID,
-                i.title,
-                i.userID,
-                i.startDateTime,
-                i.reservePrice,
-                i.description,
-                i.category,
-                i.endDateTime,
-                i.startingPrice,
-                i.bidID,
-                i.image
+                *
             FROM
-                ' . $this->items_table . ' i
-            WHERE
-                i.title LIKE ?';
+                ' . $this->items_table . '
+            WHERE ';
+
+            $word_searched = "";//The original term that the user is searching for, to be used for throwing back an error
+            
+            $search_words = explode(' ', $this->input);
+
+            foreach ($search_words as $word){
+                $query .= "title LIKE '%" . $word . "%' OR "; 
+                $word_searched .= $word. ' ';
+            }
+
+            $query = substr($query, 0, strlen($query) - 4);
+            $word_searched = substr($word_searched, 0, strlen($word_searched) - 1);
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);
-
-            // Bind search query
-            $likeString = '%' . $this->input . '%';
-            $stmt->bindParam(1, $likeString);
 
             // Execute query
             $stmt->execute();
