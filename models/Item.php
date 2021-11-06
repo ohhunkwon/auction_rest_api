@@ -273,8 +273,8 @@
                 $word_searched .= $word. ' ';
             }
 
-            $query = substr($query, 0, strlen($query) - 4);
-            $word_searched = substr($word_searched, 0, strlen($word_searched) - 1);
+            $query = substr_replace($query, "", -4);
+            $word_searched = substr_replace($word_searched, "", -1);
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);
