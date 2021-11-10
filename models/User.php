@@ -15,6 +15,7 @@
         public $role;
         public $createdAt;
         public $updatedAt;
+        public $confirmPW;
 
         // Constructor with DB
         public function __construct($db) {
@@ -48,6 +49,9 @@
             $this->role = htmlspecialchars(strip_tags($this->role));
             $this->createdAt = htmlspecialchars(strip_tags($this->createdAt));
             $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
+
+            // Hash password
+            $this->pwhash = password_hash($this->pwhash, PASSWORD_DEFAULT);
 
             // Bind Data
             $stmt->bindParam(':userID', $this->userID);
