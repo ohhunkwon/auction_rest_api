@@ -15,46 +15,41 @@
     // Instantiate User object
     $user = new User($db);
 
-    // Validation of data entry
-    // $data = $_POST;
+    // Get raw posted data
     $data = json_decode(file_get_contents("php://input"));
+    // $data = $_POST;
+    
+    // Validation of data entry
+    /* if (empty($data['email']) ||
+        empty($data['pw']) ||
+        empty($data['pwconfirm']) ||
+        empty($data['firstName']) ||
+        empty($data['lastName']) ||
+        empty($data['role'])) {
+        die('Please fill in all required fields!');
+        } */
 
-    $user->userID = $data->userID;
+    /*if ($data['pw'] !== $data['pwconfirm']) {
+        die("Password and confirm passwords fields do not match!");
+    }*/
+
+    // Assign data to User object    
+    $user->userID = $data[0]->userID;
     //$user->pwhash = password_hash($data->pw, PASSWORD_DEFAULT);
     $user->firstName = $data->firstName;
     $user->lastName = $data->lastName;
-    $user->email = $data->email;
-    $user->role = $data->role;
-    $user->createdAt = $data->createdAt;
-    $user->updatedAt = $data->updatedAt;
+    // $user->email = $data->email;
+    // $user->role = $data->role;
+    // $user->createdAt = $data->createdAt;
+    // $user->updatedAt = $data->updatedAt; 
 
-      // Create User
-      if ($user->register()) {
-        echo json_encode(
-            array('message' => 'User Created')
-        );
-    } else {
-        echo json_encode(
-            array('message' => 'User Not Created')
-        );
-    }
-
-    // if ($data['pw'] !== $data['pwconfirm']) {
-       // die("Password and confirm passwords fields do not match!");
-
-    //if (empty($data['email']) ||
-        //empty($data['pw']) ||
-        //empty($data['pwconfirm']) ||
-        //empty($data['firstName']) ||
-        //empty($data['lastName']) ||
-        //empty($data['role'])) {
-        //die('Please fill in all required fields!');
-        //}
-  
-
-    // Get raw posted data
-    // $data = json_decode(file_get_contents("php://input"));
-
-   
-
-      
+    // Create User
+    if ($user->register_user()) {
+    echo json_encode(
+        array('message' => 'User Created')
+    );
+} else {
+    echo json_encode(
+        array('message' => 'User Not Created')
+    );
+}   
