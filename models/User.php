@@ -8,7 +8,6 @@
 
         // User Properties
         public $userID;
-        public $username;
         public $email;
         public $pwhash;
         public $firstName;
@@ -29,42 +28,36 @@
                 SET
                     userID = :userID,
                     firstName = :firstName,
-                    lastName = :lastName
-            ';
-
-            /* username = :username,
-                    email = :email,
-                    pwhash = :pwhash,
-                    firstName = :firstName,
                     lastName = :lastName,
+                    email = :email,
                     role = :role,
                     createdAt = :createdAt,
-                    updatedAt = :updatedAt
-                     */
+                    updatedAt = :updatedAt,
+                    pwhash = :pwhash
+            ';
+
             //Prepare Statement
             $stmt = $this->conn->prepare($query);
         
             // Clean Data
             $this->userID = htmlspecialchars(strip_tags($this->userID));
-            //$this->username = htmlspecialchars(strip_tags($this->username));
-            //$this->email = htmlspecialchars(strip_tags($this->email));
-            //$this->pwhash = htmlspecialchars(strip_tags($this->pwhash));
+            $this->email = htmlspecialchars(strip_tags($this->email));
+            $this->pwhash = htmlspecialchars(strip_tags($this->pwhash));
             $this->firstName = htmlspecialchars(strip_tags($this->firstName));
             $this->lastName = htmlspecialchars(strip_tags($this->lastName));
-            //$this->role = htmlspecialchars(strip_tags($this->role));
-            //$this->createdAt = htmlspecialchars(strip_tags($this->createdAt));
-            //$this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
+            $this->role = htmlspecialchars(strip_tags($this->role));
+            $this->createdAt = htmlspecialchars(strip_tags($this->createdAt));
+            $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
 
             // Bind Data
             $stmt->bindParam(':userID', $this->userID);
-           // $stmt->bindParam(':username', $this->username);
-            //$stmt->bindParam(':email', $this->email);
-            //$stmt->bindParam(':pwhash', $this->pwhash);
+            $stmt->bindParam(':email', $this->email);
+            $stmt->bindParam(':pwhash', $this->pwhash);
             $stmt->bindParam(':firstName', $this->firstName);
             $stmt->bindParam(':lastName', $this->lastName);
-            //$stmt->bindParam(':role', $this->role);
-            //$stmt->bindParam(':createdAt', $this->createdAt);
-            //$stmt->bindParam(':updatedAt', $this->updatedAt);
+            $stmt->bindParam(':role', $this->role);
+            $stmt->bindParam(':createdAt', $this->createdAt);
+            $stmt->bindParam(':updatedAt', $this->updatedAt);
 
             // Execute query
             if ($stmt->execute()) {

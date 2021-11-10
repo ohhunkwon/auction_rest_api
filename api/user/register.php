@@ -3,7 +3,8 @@
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
     header('Access-Control-Allow-Methods: POST');
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
+    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, 
+            Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
     include_once '../../config/Database.php';
     include_once '../../models/User.php';
@@ -12,44 +13,28 @@
     $database = new Database();
     $db = $database->connect();
 
-    // Instantiate User object
+    // Instantiate Listing user object
     $user = new User($db);
 
     // Get raw posted data
     $data = json_decode(file_get_contents("php://input"));
-    // $data = $_POST;
-    
-    // Validation of data entry
-    /* if (empty($data['email']) ||
-        empty($data['pw']) ||
-        empty($data['pwconfirm']) ||
-        empty($data['firstName']) ||
-        empty($data['lastName']) ||
-        empty($data['role'])) {
-        die('Please fill in all required fields!');
-        } */
 
-    /*if ($data['pw'] !== $data['pwconfirm']) {
-        die("Password and confirm passwords fields do not match!");
-    }*/
-
-    // Assign data to User object    
-    $user->userID = $data[0]->userID;
-    //$user->pwhash = password_hash($data->pw, PASSWORD_DEFAULT);
+    $user->userID = $data->userID;
+    $user->email = $data->email;
+    $user->pwhash = $data->pwhash;
     $user->firstName = $data->firstName;
     $user->lastName = $data->lastName;
-    // $user->email = $data->email;
-    // $user->role = $data->role;
-    // $user->createdAt = $data->createdAt;
-    // $user->updatedAt = $data->updatedAt; 
+    $user->role = $data->role;
+    $user->createdAt = $data->createdAt;
+    $user->updatedAt = $data->updatedAt;
 
-    // Create User
+    // Create listing user
     if ($user->register_user()) {
-    echo json_encode(
-        array('message' => 'User Created')
-    );
-} else {
-    echo json_encode(
-        array('message' => 'User Not Created')
-    );
-}   
+        echo json_encode(
+            array('message' => 'User Created')
+        );
+    } else {
+        echo json_encode(
+            array('message' => 'User Not Created')
+        );
+    }
