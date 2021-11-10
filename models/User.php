@@ -64,14 +64,9 @@
             $stmt->bindParam(':updatedAt', $this->updatedAt);
 
             // Execute query
-            if ($stmt->execute()) {
-                return true;
-            }
+            $stmt->execute();
 
-            // Print error if something goes wrong
-            printf("Error: %s.\n", $stmt->error);
-
-            return false;
+            return $stmt;
         }
 
         // Login user
@@ -95,4 +90,5 @@
             $stmt->execute();
 
             return $stmt;
+        }
     }
