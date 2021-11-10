@@ -27,24 +27,25 @@
     $user->role = $data->role;
     $user->createdAt = $data->createdAt;
     $user->updatedAt = $data->updatedAt;
-    $user->confirmPW = $data->confirmPW;
 
     if (empty($user->userID) ||
         empty($user->pwhash) ||
         empty($user->email) ||
         empty($user->firstName) ||
         empty($user->lastName) ||
-        empty($user->role) ||
-        empty($user->createdAt) ||
-        empty($user->updatedAt)) {
+        empty($user->role)) {
         echo json_encode(
             array('message' => 'Please fill in all fields!')
         );
-    } elseif ($user->pwhash !== $data->confirmPW) {
+        die();
+    } 
+    if ($user->pwhash !== $data->confirmPW) {
         echo json_encode(
-            array('message' => 'Password and confirmed Password do not Match!')
+            array('message' => "Passwords don't match!")
         );
-    } else {
+    }
+    
+    else {
         // Create listing user
         if ($user->register_user()) {
             echo json_encode(
@@ -56,3 +57,10 @@
             );
         }
     }
+
+    
+    /*
+    if ($data['pw'] !== $data['pwconfirm']) {
+        die("Password and confirm passwords fields do not match!");
+    }
+    */
