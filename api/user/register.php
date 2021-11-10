@@ -57,10 +57,3 @@
             );
         }
     }
-
-    
-    /*
-    if ($data['pw'] !== $data['pwconfirm']) {
-        die("Password and confirm passwords fields do not match!");
-    }
-    */
