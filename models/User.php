@@ -15,6 +15,7 @@
         public $role;
         public $createdAt;
         public $updatedAt;
+        public $confirmPW;
 
         // Constructor with DB
         public function __construct($db) {
