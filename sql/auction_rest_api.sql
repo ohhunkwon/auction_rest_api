@@ -84,8 +84,9 @@ INSERT INTO `Items` (`itemID`, `title`, `description`, `category`, `startingPric
 
 CREATE TABLE `Users` (
   `userID` int(11) NOT NULL,
-  `firstName` varchar(255) NOT NULL,
-  `lastName` varchar(255) NOT NULL,
+  'pwhash' VARCHAR(255) NOT NULL,
+  `firstName` varchar(40) NOT NULL,
+  `lastName` varchar(40) NOT NULL,
   `email` varchar(255) NOT NULL,
   `role` varchar(10) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
