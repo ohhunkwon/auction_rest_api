@@ -50,6 +50,9 @@
             $this->createdAt = htmlspecialchars(strip_tags($this->createdAt));
             $this->updatedAt = htmlspecialchars(strip_tags($this->updatedAt));
 
+            // Hash password
+            $this->pwhash = password_hash($this->pwhash, PASSWORD_DEFAULT);
+            
             // Bind Data
             $stmt->bindParam(':userID', $this->userID);
             $stmt->bindParam(':email', $this->email);
@@ -70,4 +73,26 @@
 
             return false;
         }
+
+        // Login user
+        public function select_user() {
+            // Create query
+            $query = "SELECT 
+                    u.userID,
+                    u.pwhash
+                FROM
+                    ' . $this->users_table . ' u
+                WHERE u.userID = ?
+            ";
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind Category
+            $stmt->bindParam(1, $this->userID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
     }

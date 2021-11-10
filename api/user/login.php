@@ -20,37 +20,43 @@
     //$data = $_POST;
     $data = json_decode(file_get_contents("php://input"));
 
-    if (empty($data['userID']) ||
-        empty($data['pwhash'])) {
+    $user->userID = $data->userID;
+
+    // Check fields not empty
+
+    if (empty($data->userID) ||
+        empty($data->inputpw)) {
         echo json_encode(
                 array('message' => 'Please fill in all required fields!') 
         );
-        // Redirect to login page (is this necessary/is there a better way?)
-        $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
-        dirname($_SERVER['PHP_SELF']) . '/login.php';
-        header('Location: ' . $loginURL);
-        }
-
-    $user->userID = $data->userID;
-    $user->pwhash = $data->pwhash;
-    
-    // Verify login, start session and redirect to index.php
-
-    $query = "SELECT userID FROM User " . "WHERE user.userID = '$userID' AND " . "user.pwhash = SHA('$pwhash')";
-    $data = mysqli_query($conn, $query);
-    if (mysqli_num_rows($data) == 1) {
-        $row = mysqli_fetch_array($data);
-        $_SESSION['userID'] = $row['userID'];
-        //$_SESSION['username'] = $row['username'];
-        $indexURL = 'http://' . $_SERVER['HTTP_HOST'] .
-        dirname($_SERVER['PHP_SELF']) . '/index.php';
-        header('Location: ' . $indexURL);
-    } else {
-        echo json_encode(
-            array('message' =>'Invalid email or password.')
-         );
-        // Redirect to login page
-        $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
-        dirname($_SERVER['PHP_SELF']) . '/login.php';
-        header('Location: ' . $loginURL);
     }
+
+    /* // Redirect to login page (is this necessary/is there a better way?)
+
+    $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
+    dirname($_SERVER['PHP_SELF']) . '/login.php';
+    header('Location: ' . $loginURL); */
+    
+    // Get user from db
+    $result = $user->select_user();
+
+    // Get row count
+    $num = $result->rowCount();
+
+    // Check if user exists in database
+    if ($num == 1) {
+        if (password_verify($data->inputpw, $user->pwhash)) {
+            echo json_encode(
+                    array('message' => 'Login successful!')
+            );
+        } else {
+            echo json_encode(
+                array('message' => 'Login failed')
+            );
+        }  
+    }
+
+
+
+
+    
