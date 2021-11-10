@@ -28,13 +28,32 @@
     $user->createdAt = $data->createdAt;
     $user->updatedAt = $data->updatedAt;
 
-    // Create listing user
-    if ($user->register_user()) {
+    if (empty($user->userID) ||
+        empty($user->pwhash) ||
+        empty($user->email) ||
+        empty($user->firstName) ||
+        empty($user->lastName) ||
+        empty($user->role)) {
         echo json_encode(
-            array('message' => 'User Created')
+            array('message' => 'Please fill in all fields!')
         );
-    } else {
+        die();
+    } 
+    if ($user->pwhash !== $data->confirmPW) {
         echo json_encode(
-            array('message' => 'User Not Created')
+            array('message' => "Passwords don't match!")
         );
+    }
+    
+    else {
+        // Create listing user
+        if ($user->register_user()) {
+            echo json_encode(
+                array('message' => 'User Created')
+            );
+        } else {
+            echo json_encode(
+                array('message' => 'User Not Created')
+            );
+        }
     }
