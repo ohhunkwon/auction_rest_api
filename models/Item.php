@@ -317,23 +317,20 @@
         public function read_item_auction_end() {
             // Create query
             $query = 'SELECT 
-                i.itemID,
-                i.title,
-                i.userID,
-                i.startDateTime,
+                b.userID,
+                i.highestPrice,
                 i.reservePrice,
+                i.title,
                 i.description,
                 i.category,
-                i.endDateTime,
-                i.startingPrice,
                 i.bidID,
-                i.image,
-                u.firstName
+                i.endDateTime,
+                i.startDateTime
             FROM
-                ' . $this->items_table . ' i, ' . $this->users_table .' u
+                ' . $this->items_table . ' i
+            INNER JOIN ' . $this->bids_table .' b ON i.bidID = b.bidID
             WHERE
-                i.itemID = ? AND u.userID = i.userID
-            LIMIT 0, 1';
+                i.itemID = ?';
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);
@@ -346,39 +343,4 @@
 
             return $stmt;
         }
-
-        // Get Single Item
-        public function read_item_bid_end() {
-            // Create query
-            $query = 'SELECT 
-                i.itemID,
-                i.title,
-                i.userID,
-                i.startDateTime,
-                i.reservePrice,
-                i.description,
-                i.category,
-                i.endDateTime,
-                i.startingPrice,
-                i.bidID,
-                i.image,
-                u.firstName
-            FROM
-                ' . $this->items_table . ' i, ' . $this->users_table .' u
-            WHERE
-                i.itemID = ? AND u.userID = i.userID
-            LIMIT 0, 1';
-
-            // Prepare Statement
-            $stmt = $this->conn->prepare($query);
-
-            // Bind ID
-            $stmt->bindParam(1, $this->itemID);
-
-            // Execute query
-            $stmt->execute();
-
-            return $stmt;
-        }        
-        //herr!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }

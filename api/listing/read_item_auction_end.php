@@ -16,14 +16,15 @@
     // Get itemID from URL
     $item->itemID = isset($_GET['itemID']) ? $_GET['itemID'] : die();
 
-    // Get Category Item(s)
-    $result = $item->read_item();
+    // Get Item
+    $result = $item->read_item_auction_end();
     
     //Get row count
     $num = $result->rowCount();
 
     // Check if any items in listing
     if ($num > 0) {
+
         // Items array
         $items_arr = array();
         $items_arr['data'] = array();
@@ -32,29 +33,29 @@
             extract($row);
 
             $item_instance = array(
-                'itemID' => $itemID,
-                'title' => $title,
-                'description' => html_entity_decode($description),
-                'category' => $category,
                 'userID' => $userID,
-                'seller' => $firstName,
-                'startDateTime' => $startDateTime,
-                'endDateTime' => $endDateTime,
-                'startingPrice' => $startingPrice,
+                'highestPrice' => $highestPrice,
                 'reservePrice' => $reservePrice,
-                'latestBidID' => $bidID,
-                'image' => $image,
+                'title' => $title,
+                'description' => $description,
+                'category' => $category,
+                'bidID' => $bidID,
+                'endDateTime' => $endDateTime,
+                'startDateTime' => $startDateTime
             );
 
             // Push to "data"
             array_push($items_arr['data'], $item_instance);
         }
 
-        // Turn to JSON & output
-        echo json_encode($items_arr);
-
-    } else {
-        echo json_encode(
-            array('message' => 'No Items Found')
-        );
+        // Check if reservePrice has been met
+        if ($items_arr['data'][0]['highestPrice'] >= $items_arr['data'][0]['reservePrice']) {
+            echo json_encode(
+                array('winner' => $items_arr['data'][0]['userID'])
+            );
+        } else {
+            echo json_encode(
+                array('winner' => null)
+            );
+        }
     }
