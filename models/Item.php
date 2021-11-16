@@ -4,6 +4,7 @@
         private $conn;
         private $items_table = 'Items';
         private $users_table = 'Users';
+        private $bids_table = 'Bids';
 
         // Item Properties
         public $itemID;
@@ -347,7 +348,7 @@
         }
 
         // Get Single Item
-        public function read_item() {
+        public function read_item_bid_end() {
             // Create query
             $query = 'SELECT 
                 i.itemID,
