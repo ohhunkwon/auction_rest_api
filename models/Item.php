@@ -57,7 +57,7 @@
             return $stmt;
         }
 
-        // Get Single Item
+        // Get Single Item, used if an auction is currently ongoing
         public function read_item() {
             // Create query
             $query = 'SELECT 
@@ -311,4 +311,73 @@
 
             return $stmt;
         }
+
+        // Get Single Item, when the auction has ended
+        public function read_item_auction_end() {
+            // Create query
+            $query = 'SELECT 
+                i.itemID,
+                i.title,
+                i.userID,
+                i.startDateTime,
+                i.reservePrice,
+                i.description,
+                i.category,
+                i.endDateTime,
+                i.startingPrice,
+                i.bidID,
+                i.image,
+                u.firstName
+            FROM
+                ' . $this->items_table . ' i, ' . $this->users_table .' u
+            WHERE
+                i.itemID = ? AND u.userID = i.userID
+            LIMIT 0, 1';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind ID
+            $stmt->bindParam(1, $this->itemID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        // Get Single Item
+        public function read_item() {
+            // Create query
+            $query = 'SELECT 
+                i.itemID,
+                i.title,
+                i.userID,
+                i.startDateTime,
+                i.reservePrice,
+                i.description,
+                i.category,
+                i.endDateTime,
+                i.startingPrice,
+                i.bidID,
+                i.image,
+                u.firstName
+            FROM
+                ' . $this->items_table . ' i, ' . $this->users_table .' u
+            WHERE
+                i.itemID = ? AND u.userID = i.userID
+            LIMIT 0, 1';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind ID
+            $stmt->bindParam(1, $this->itemID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }        
+        //herr!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
