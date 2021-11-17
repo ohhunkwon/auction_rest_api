@@ -288,4 +288,27 @@
 
             return $stmt;
         }
+
+        // This method should always be called before Item info page loads! To check if it has ended
+        public function has_auction_ended() {
+            // Create query
+            $query = 'SELECT 
+                i.endDateTime
+            FROM
+                ' . $this->items_table . ' i
+            WHERE
+                i.itemID = ?
+            LIMIT 0, 1';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind ID
+            $stmt->bindParam(1, $this->itemID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
     }
