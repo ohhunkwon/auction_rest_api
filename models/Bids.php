@@ -13,6 +13,8 @@
     public $userID;
     public $itemID;
 
+    public $highestPrice;
+
     // Constructor with DB
       public function __construct($db) {
         $this->conn = $db;
@@ -64,8 +66,29 @@
       $stmt->execute();
 
       return $stmt;
-      
   }
+
+      // Get latest bid's userID
+      public function get_latest_bid_userID($item_id) {
+        //create query
+        $query = 'SELECT
+          b.userID
+        FROM
+            ' . $this->bids_table . '
+        INNER JOIN $
+        WHERE itemID = ?';
+  
+        // Prepare Statement
+        $stmt = $this->conn->prepare($query);
+  
+        // Bind ID
+        $stmt->bindParam(1, $item_id);
+  
+        // Execute query
+        $stmt->execute();
+  
+        return $stmt;
+    }
 
     // Create Bid
   public function create() {
@@ -106,5 +129,38 @@
       return false;
   }
 
+    // Update Highest Price in Items Table - Input: ID is itemID, PRICE is amount of bid just created, BIDID is bidID
+    public function update_highest_price($ID, $BIDID, $PRICE) {
+      // Create query
+      $query = 'UPDATE ' . $this->items_table . '
+          SET
+              highestPrice = :highestPrice,
+              bidID = :bidID
+          WHERE
+              itemID = :itemID';
+
+      //Prepare Statement
+      $stmt = $this->conn->prepare($query);
+  
+      // Clean Data
+      $this->highestPrice = htmlspecialchars(strip_tags($this->highestPrice));
+      $this->bidID = htmlspecialchars(strip_tags($this->bidID));
+      $this->itemID = htmlspecialchars(strip_tags($this->itemID));
+
+      // Bind Data
+      $stmt->bindParam(':highestPrice', $PRICE);
+      $stmt->bindParam(':bidID', $BIDID);
+      $stmt->bindParam(':itemID', $ID);
+
+      // Execute query
+      if ($stmt->execute()) {
+          return true;
+      }
+
+      // Print error if something goes wrong
+      printf("Error: %s.\n", $stmt->error);
+
+      return false;
+  }
 
   }

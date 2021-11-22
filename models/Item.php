@@ -4,6 +4,7 @@
         private $conn;
         private $items_table = 'Items';
         private $users_table = 'Users';
+        private $bids_table = 'Bids';
 
         // Item Properties
         public $itemID;
@@ -57,7 +58,7 @@
             return $stmt;
         }
 
-        // Get Single Item
+        // Get Single Item, used if an auction is currently ongoing
         public function read_item() {
             // Create query
             $query = 'SELECT 
@@ -299,6 +300,37 @@
             WHERE
                 i.itemID = ?
             LIMIT 0, 1';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind ID
+            $stmt->bindParam(1, $this->itemID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        // Get Single Item, when the auction has ended
+        public function read_item_auction_end() {
+            // Create query
+            $query = 'SELECT 
+                b.userID,
+                i.highestPrice,
+                i.reservePrice,
+                i.title,
+                i.description,
+                i.category,
+                i.bidID,
+                i.endDateTime,
+                i.startDateTime
+            FROM
+                ' . $this->items_table . ' i
+            INNER JOIN ' . $this->bids_table .' b ON i.bidID = b.bidID
+            WHERE
+                i.itemID = ?';
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);

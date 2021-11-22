@@ -53,6 +53,7 @@ if ($num > 0) {
             echo json_encode(
                 array('message' => 'Bid Created')
             );
+            $bid->update_highest_price($bid->itemID, $bid->bidID, $bid->amount);
         } else {
             echo json_encode(
                 array('message' => 'Bid Not Created')
