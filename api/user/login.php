@@ -14,7 +14,6 @@
     $user = new User($db);
 
     // Validation of data entry
-    //$data = $_POST;
     $data = json_decode(file_get_contents("php://input"));
 
     $user->userID = $data->userID;
@@ -24,36 +23,49 @@
     if (empty($data->userID) ||
         empty($data->inputpw)) {
         echo json_encode(
-                array('message' => 'Please fill in all required fields!') 
+                array('message' => 'Please fill in userID and password!') 
         );
     }
 
-    /* // Redirect to login page (is this necessary/is there a better way?)
-
-    $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
-    dirname($_SERVER['PHP_SELF']) . '/login.php';
-    header('Location: ' . $loginURL); */
-    
     // Get user from db
-    $result = $user->select_user();
+    $result = $user->user_login();
 
-    // Get row count
+    //Get row count
     $num = $result->rowCount();
 
-    // Check if user exists in database
-    if ($num == 1) {
-        if (password_verify($data->inputpw, $user->pwhash)) {
+    // Check if any user in Users
+    if ($num > 0) {
+        // Users array
+        $users_arr = array();
+        $users_arr['data'] = array();
+
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+
+            $user_instance = array(
+                'userID' => $userID,
+                'pwhash' => $pwhash
+            );
+
+            // Push to "data"
+            array_push($users_arr['data'], $user_instance);
+        }
+        
+        if (password_verify($data->inputpw, $users_arr['data'][0]['pwhash'])) {
+            $_SESSION['loggedin'] = true;
+            $_SESSION['userID'] = $user->userID;
             echo json_encode(
-                    array('message' => 'Login successful!')
+                    array('message' => 'Welcome! Login successful!')
             );
         } else {
             echo json_encode(
-                array('message' => 'Login failed')
+                array('message' => 'Incorrect password!')
             );
-        }  
-    }
-
-
-
-
+        } 
+    } else {
+        echo json_encode(
+            array('message' => 'Login failed')
+        );
+    } 
     
+

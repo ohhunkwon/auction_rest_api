@@ -91,4 +91,31 @@
 
             return $stmt;
         }
+
+        public function user_login() {
+            // Create query
+            $query = 'SELECT 
+                userID,
+                pwhash    
+            FROM
+               ' . $this->users_table . '
+            WHERE
+                userID = :userID
+            ';
+
+            //Prepare Statement
+            $stmt = $this->conn->prepare($query);
+        
+            // Clean Data
+            $this->userID = htmlspecialchars(strip_tags($this->userID));
+
+            // Bind Data
+            $stmt->bindParam(':userID', $this->userID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+
+        }
     }
