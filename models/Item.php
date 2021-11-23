@@ -183,8 +183,8 @@
             return false;
         }
 
-        // Update Listing Item
-        public function update() {
+        // // WE WILL NOT BE IMPLEMENTING: Update Listing Item
+        /* public function update() {
             // Create query
             $query = 'UPDATE ' . $this->items_table . '
                 SET
@@ -233,10 +233,10 @@
             printf("Error: %s.\n", $stmt->error);
 
             return false;
-        }
+        } */
 
-        // Delete Listing Item
-        public function delete() {
+        // WE WILL NOT BE IMPLEMENTING: Delete Listing Item
+        /* public function delete() {
             // Create query
             $query = 'DELETE FROM ' . $this->items_table . ' WHERE itemID = :itemID';
 
@@ -258,7 +258,7 @@
             printf("Error: %s.\n", $stmt->error);
 
             return false;
-        }
+        } */
 
         // Get Items of that match a specific search query
         public function read_search() {
