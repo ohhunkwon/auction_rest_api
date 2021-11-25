@@ -21,13 +21,15 @@
         echo json_encode(
                 array('message' => 'Please fill in email and password!') 
         );
+        die();
     }
 
     // Get user from db
     $result = $user->user_login();
     if ($result->rowCount() == 0) {
+        http_response_code(400);
         echo json_encode(
-            array('message' => 'Login failed')
+            array('message' => 'User/Email not fouund')
         );
         die();
     }

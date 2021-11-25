@@ -64,6 +64,26 @@
             return $stmt;
         }
 
+        public function read_user() {
+            // Create query
+            $query = 'SELECT *
+            FROM
+                ' . $this->users_table .'
+            WHERE
+                userID = ?';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind ID
+            $stmt->bindParam(1, $this->userID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
         // Login user
         public function select_user() {
             // Create query

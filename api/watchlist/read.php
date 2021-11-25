@@ -22,29 +22,31 @@
     //Get row count
     $num = $result->rowCount();
 
-    // Check if any items in listing
-    if ($num > 0) {
-        // Items array
-        $watchlist_arr = array();
-        $watchlist_arr['data'] = array();
+    // Items array
+    $watchlist_arr = array();
+    $watchlist_arr['data'] = array();
 
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            extract($row);
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        extract($row);
 
-            $watchlist_instance = array(
-                'itemID' => $itemID,
-                'userID' => $userID
-            );
-
-            // Push to "data"
-            array_push($watchlist_arr['data'], $watchlist_instance);
-        }
-
-        // Turn to JSON & output
-        echo json_encode($watchlist_arr);
-
-    } else {
-        echo json_encode(
-            array('message' => 'No Watchlist items Found')
+        $watchlist_instance = array(
+            'itemID' => $itemID,
+            'title' => $title,
+            'userID' => $userID,
+            'startDateTime' => $startDateTime,
+            'reservePrice' => $reservePrice,
+            'description' => $description,
+            'category' => $category,
+            'endDateTime' => $endDateTime,
+            'startingPrice' => $startingPrice,
+            'bidID' => $bidID,
+            'image' => $image
         );
+
+        // Push to "data"
+        array_push($watchlist_arr['data'], $watchlist_instance);
     }
+
+    // Turn to JSON & output
+    echo json_encode($watchlist_arr);
+
