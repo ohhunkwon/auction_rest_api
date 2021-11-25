@@ -40,20 +40,13 @@
     }
 
     if ($data->password !== $data->confirmPassword) {
-        echo json_encode(
-            array('message' => "Passwords don't match!")
-        );
-    }
-    
-    else {
+        echo json_encode(array('message' => "Passwords don't match!"));
+        die();
+    } else {
         // Create listing user
         if ($user->register_user()) {
-            echo json_encode(
-                array('message' => 'User Created')
-            );
+            echo json_encode(array('message' => 'User Created'));
         } else {
-            echo json_encode(
-                array('message' => 'User Not Created')
-            );
+            echo json_encode(array('message' => 'User Not Created'));
         }
     }

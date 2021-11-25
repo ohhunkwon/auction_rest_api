@@ -17,8 +17,7 @@
 
     $user->email = $data->email;
     // Check fields not empty
-    if (empty($data->email) ||
-        empty($data->password)) {
+    if (empty($data->email) || empty($data->password)) {
         echo json_encode(
                 array('message' => 'Please fill in email and password!') 
         );
