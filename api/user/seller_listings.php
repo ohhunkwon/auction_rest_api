@@ -17,9 +17,9 @@
     session_start();
     if (isset($_SESSION['userID'])) {
     // Show User listings (only if role == seller)
-    $query =     
-    }
-    else {
+    // $query =  
+        return;   
+    } else {
         echo "Please login";
         // Redirect to login page
         $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .

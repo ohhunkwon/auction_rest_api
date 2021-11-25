@@ -19,16 +19,15 @@
     // Get raw posted data
     $data = json_decode(file_get_contents("php://input"));
 
-    $user->userID = $data->userID;
     $user->email = $data->email;
-    $user->pwhash = $data->pwhash;
+    $user->pwhash = $data->password;
     $user->firstName = $data->firstName;
     $user->lastName = $data->lastName;
     $user->role = $data->role;
     $user->createdAt = $data->createdAt;
     $user->updatedAt = $data->updatedAt;
 
-    if (empty($user->userID) ||
+    if (
         empty($user->pwhash) ||
         empty($user->email) ||
         empty($user->firstName) ||
@@ -38,8 +37,9 @@
             array('message' => 'Please fill in all fields!')
         );
         die();
-    } 
-    if ($user->pwhash !== $data->confirmPW) {
+    }
+
+    if ($data->password !== $data->confirmPassword) {
         echo json_encode(
             array('message' => "Passwords don't match!")
         );
