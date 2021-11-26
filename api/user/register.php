@@ -1,11 +1,6 @@
 <?php
     // Headers
-    header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: POST');
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, 
-            Access-Control-Allow-Methods, Authorization, X-Requested-With');
-
+    include('../../config/Cors.php');
     include_once '../../config/Database.php';
     include_once '../../models/User.php';
 
@@ -40,11 +35,13 @@
     }
 
     if ($data->password !== $data->confirmPassword) {
+        // throw back a 400 bad request response
         echo json_encode(array('message' => "Passwords don't match!"));
         die();
     } else {
         // Create listing user
         if ($user->register_user()) {
+            // this IF is probably redundant - it will always create a user until you hit an error, in which case everything breaks
             echo json_encode(array('message' => 'User Created'));
         } else {
             echo json_encode(array('message' => 'User Not Created'));

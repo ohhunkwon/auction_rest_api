@@ -70,13 +70,13 @@
             FROM
                 ' . $this->users_table .'
             WHERE
-                userID = ?';
+                userID = :userID';
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);
 
             // Bind ID
-            $stmt->bindParam(1, $this->userID);
+            $stmt->bindParam(':userID', $this->userID);
 
             // Execute query
             $stmt->execute();

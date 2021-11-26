@@ -1,8 +1,7 @@
 <?php
+    session_start();
     // Headers
-    header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
-
+    include('../../config/Cors.php');
     include_once '../../config/Database.php';
     include_once '../../models/User.php';
 
@@ -14,7 +13,7 @@
     $user = new User($db);
 
     // Get itemID from URL
-    $user->userID = isset($_GET['userID']) ? $_GET['userID'] : die();
+    $user->userID = intval($_SESSION['userID']);
 
     // Listing items query
     $result = $user->read_user();
@@ -37,6 +36,7 @@
         extract($row);
 
         $user_instance = array(
+            'userID' => $userID,
             'firstName' => $firstName,
             'lastName' => $lastName,
             'email' => $email,

@@ -1,8 +1,7 @@
 <?php
+    session_start();
     // Headers
-    header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
-
+    include('../../config/Cors.php');
     include_once '../../config/Database.php';
     include_once '../../models/User.php';
 
@@ -14,12 +13,12 @@
     $user = new User($db);
 
     // Use session to verify User is logged in
-    session_start();
     if (isset($_SESSION['userID'])) {
     // Show User listings (only if role == seller)
     // $query =  
         return;   
     } else {
+        // don't redirect - just throw back a 401 unauthorized
         echo "Please login";
         // Redirect to login page
         $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .

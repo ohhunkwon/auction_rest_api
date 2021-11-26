@@ -1,8 +1,7 @@
 <?php
+    session_start();
     // Headers
-    header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
-
+    include('../../config/Cors.php');
     include_once '../../config/Database.php';
     include_once '../../models/User.php';
 
@@ -37,9 +36,8 @@
     // Check if any user in Users
     $userResult = $result->fetch(PDO::FETCH_ASSOC);
     if (password_verify($data->password, $userResult['pwhash'])) {
-        session_start();
         $_SESSION['authenticated'] = true;
-        $_SESSION['userID'] = $user->userID;
+        $_SESSION['userID'] = $userResult['userID'];
         unset($userResult['pwhash']);
         echo json_encode($userResult);
     } else {
