@@ -2,6 +2,9 @@
 
 1. BIDS
 
+- read_user_bids.php
+Req e.g. http://localhost:8888/auction_rest_api/api/bids/read_user_bids.php?userID=3
+
 - create.php:
 Request: e.g.
 {

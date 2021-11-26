@@ -34,6 +34,15 @@
         die();
     }
 
+    // Check if email exists query
+    $result = $user->check_unique_email($user->email);
+
+    if ($result->rowCount() == 1) {
+        http_response_code(400);
+        die();
+    }
+
+
     if ($data->password !== $data->confirmPassword) {
         // throw back a 400 bad request response ---> DONE!
         http_response_code(400);

@@ -22,6 +22,12 @@
     //Get row count
     $num = $result->rowCount();
 
+    if ($num == 0) {
+        echo json_encode(
+            array('winner' => "No Winner")
+        );
+    }
+
     // Check if any items in listing
     if ($num > 0) {
 
@@ -51,11 +57,9 @@
         // Check if reservePrice has been met
         if ($items_arr['data'][0]['highestPrice'] >= $items_arr['data'][0]['reservePrice']) {
             echo json_encode(
-                array('winner' => $items_arr['data'][0]['userID'])
+                $items_arr
             );
         } else {
-            echo json_encode(
-                array('winner' => null)
-            );
+            header("HTTP/1.1 400 'Reserve price not met!'");
         }
     }
