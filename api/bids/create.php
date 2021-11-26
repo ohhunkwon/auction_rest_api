@@ -28,6 +28,8 @@
     // Check if user creating bid is Buyer, not Seller
     $res = $bid->get_user_role($data->userID);
 
+    $role = $res->fetch(PDO::FETCH_ASSOC)["role"];
+
     if ($role === "Seller") {
         http_response_code(401);
         die();
