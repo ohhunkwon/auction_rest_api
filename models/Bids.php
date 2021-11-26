@@ -231,4 +231,27 @@
       return false;
   }
 
+  // Get All Bids of Specific User
+  public function read_user_bids() {
+    // Create query
+    $query = 'SELECT 
+        *
+    FROM
+        ' . $this->bids_table . '
+    WHERE
+        userID = ?';
+
+    // Prepare Statement
+    $stmt = $this->conn->prepare($query);
+
+    // Bind Category
+    $stmt->bindParam(1, $this->userID);
+
+    // Execute query
+    $stmt->execute();
+
+    return $stmt;
+}
+
+
   }
