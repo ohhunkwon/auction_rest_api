@@ -57,11 +57,11 @@
         // Check if reservePrice has been met
         if ($items_arr['data'][0]['highestPrice'] >= $items_arr['data'][0]['reservePrice']) {
             echo json_encode(
-                array('winner' => $items_arr['data'][0]['userID'])
+                $items_arr
             );
         } else {
             echo json_encode(
-                array('winner' => null)
+                array('message' => "Reserve Price not met!")
             );
         }
     }
