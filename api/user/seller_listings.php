@@ -19,10 +19,12 @@
     // $query =  
         return;   
     } else {
-        // don't redirect - just throw back a 401 unauthorized
-        echo "Please login";
+        // don't redirect - just throw back a 401 unauthorized ---> DONE!
+        http_response_code(401);
+
+        // echo "Please login";
         // Redirect to login page
-        $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
-        dirname($_SERVER['PHP_SELF']) . '/login.php';
-        header('Location: ' . $loginURL);
+        // $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
+        // dirname($_SERVER['PHP_SELF']) . '/login.php';
+        // header('Location: ' . $loginURL);
     }

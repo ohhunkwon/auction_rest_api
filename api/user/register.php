@@ -35,8 +35,8 @@
     }
 
     if ($data->password !== $data->confirmPassword) {
-        // throw back a 400 bad request response
-        echo json_encode(array('message' => "Passwords don't match!"));
+        // throw back a 400 bad request response ---> DONE!
+        http_response_code(400);
         die();
     } else {
         // Create listing user
