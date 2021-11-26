@@ -1,4 +1,5 @@
 <?php
+    include('../../config/AuthCheck.php');
     session_start();
     // Headers
     include('../../config/Cors.php');
