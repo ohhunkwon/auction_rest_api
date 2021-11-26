@@ -280,5 +280,21 @@ public function read_items() {
   return $stmt;
 }
 
+  // Get All Bids of Specific Item
+  public function read_bids_item() {
+    // Create query
+    $query = 'SELECT * FROM Bids WHERE itemID = :itemID ORDER BY createdAt DESC';
+
+    // Prepare Statement
+    $stmt = $this->conn->prepare($query);
+
+    // Bind Category
+    $stmt->bindParam(":itemID", $this->itemID);
+
+    // Execute query
+    $stmt->execute();
+
+    return $stmt;
+}
 
   }
