@@ -64,6 +64,22 @@
             return $stmt;
         }
 
+        public function check_unique_email($EMAIL) {
+            // Create query
+            $query = 'SELECT * FROM ' . $this->users_table . ' WHERE email = ?';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind ID
+            $stmt->bindParam(1, $EMAIL);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
         public function read_user() {
             // Create query
             $query = 'SELECT *
