@@ -52,7 +52,6 @@
           b.itemID
         FROM
             ' . $this->bids_table . ' b
-        INNER JOIN ' . $this->items_table . ' i ON i.bidID = b.bidID 
         WHERE b.itemID = ?';
 
         // Prepare Statement
@@ -111,12 +110,62 @@
         return $stmt;
     }
 
+    //Get bidID and itemID of latest Bid
+    public function read_latest_bidID_itemID() {
+      //create query  //modify!!!!!!!!!!!!!!!!!!
+      $query = 'SELECT
+            b.bidID,
+            b.createdAt,
+            b.amount,
+            b.userID,
+            b.itemID
+          FROM
+              Bids b
+          WHERE b.itemID = :itemID and amount = (SELECT MAX(b.amount) FROM Bids b WHERE b.itemID = :itemID)';
+
+      // Prepare Statement
+      $stmt = $this->conn->prepare($query);
+
+      // Bind ID
+      $stmt->bindParam(":itemID", $this->itemID);
+
+      // Execute query
+      $stmt->execute();
+
+      return $stmt;
+      
+  }
+
+    // Set bidID in Items Table
+  public function set_bidID_items_table($BIDID, $ITEMID) {
+    // Create query
+    $query = 'UPDATE Items
+      SET bidID = :bidID
+      WHERE itemID = :itemID
+    ';
+
+      //Prepare Statement
+      $stmt = $this->conn->prepare($query);
+
+      // Bind Data
+      $stmt->bindParam(':bidID', $BIDID);
+      $stmt->bindParam(':itemID', $ITEMID);
+
+      // Execute query
+      if ($stmt->execute()) {
+        return true;
+      }
+      // Print error if something goes wrong
+      printf("Error: %s.\n", $stmt->error);
+
+      return false;
+  }
+
     // Create Bid
   public function create() {
     // Create query
     $query = 'INSERT INTO ' . $this->bids_table . '
         SET
-          bidID = :bidID,
           createdAt = :createdAt,
           amount = :amount,
           userID = :userID,
@@ -127,14 +176,12 @@
       $stmt = $this->conn->prepare($query);
 
       // Clean Data
-      $this->bidID = htmlspecialchars(strip_tags($this->bidID));
       $this->createdAt = htmlspecialchars(strip_tags($this->createdAt));
       $this->amount = htmlspecialchars(strip_tags($this->amount));
       $this->userID = htmlspecialchars(strip_tags($this->userID));
       $this->itemID = htmlspecialchars(strip_tags($this->itemID));
 
       // Bind Data
-      $stmt->bindParam(':bidID', $this->bidID);
       $stmt->bindParam(':createdAt', $this->createdAt);
       $stmt->bindParam(':amount', $this->amount);
       $stmt->bindParam(':userID', $this->userID);
