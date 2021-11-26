@@ -1,11 +1,6 @@
 <?php
     // Headers
-    header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: POST');
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, 
-            Access-Control-Allow-Methods, Authorization, X-Requested-With');
-
+    include('../../config/Cors.php');
     include_once '../../config/Database.php';
     include_once '../../models/User.php';
 
@@ -19,16 +14,15 @@
     // Get raw posted data
     $data = json_decode(file_get_contents("php://input"));
 
-    $user->userID = $data->userID;
     $user->email = $data->email;
-    $user->pwhash = $data->pwhash;
+    $user->pwhash = $data->password;
     $user->firstName = $data->firstName;
     $user->lastName = $data->lastName;
     $user->role = $data->role;
     $user->createdAt = $data->createdAt;
     $user->updatedAt = $data->updatedAt;
 
-    if (empty($user->userID) ||
+    if (
         empty($user->pwhash) ||
         empty($user->email) ||
         empty($user->firstName) ||
@@ -38,22 +32,18 @@
             array('message' => 'Please fill in all fields!')
         );
         die();
-    } 
-    if ($user->pwhash !== $data->confirmPW) {
-        echo json_encode(
-            array('message' => "Passwords don't match!")
-        );
     }
-    
-    else {
+
+    if ($data->password !== $data->confirmPassword) {
+        // throw back a 400 bad request response ---> DONE!
+        http_response_code(400);
+        die();
+    } else {
         // Create listing user
         if ($user->register_user()) {
-            echo json_encode(
-                array('message' => 'User Created')
-            );
+            // this IF is probably redundant - it will always create a user until you hit an error, in which case everything breaks
+            echo json_encode(array('message' => 'User Created'));
         } else {
-            echo json_encode(
-                array('message' => 'User Not Created')
-            );
+            echo json_encode(array('message' => 'User Not Created'));
         }
     }

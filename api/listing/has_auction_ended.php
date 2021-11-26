@@ -25,11 +25,5 @@
     $now = new DateTime();
 
     // Check if any items in listing
-    if ($now > $end_datetime ) {
-        echo json_encode("true");
-        return true;
-
-    } else {
-        echo json_encode("false");
-        return false;
-    }
+    return $now > $end_datetime ? true : false;
+    

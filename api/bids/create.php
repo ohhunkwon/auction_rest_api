@@ -25,47 +25,62 @@
     $bid->bidID = $data->bidID;
     $bid->userID = $data->userID;
 
-// Get highest bid for item before we try to insert new bid
-$result = $bid->get_highest_bid($bid->itemID);
-    
-//Get row count
-$num = $result->rowCount();
+    // Check if user creating bid is Buyer, not Seller
+    $res = $bid->get_user_role($data->userID);
 
-// Check if any result from getHighestBid helper function
-if ($num > 0) {
-    // Items array
-    $bid_arr = array();
-    $bid_arr['data'] = array();
+    $role = $res->fetch(PDO::FETCH_ASSOC)["role"];
 
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        extract($row);
+    if ($role === "Seller") {
+        http_response_code(401);
+        die();
+    }
+
+    // Get highest bid for item before we try to insert new bid
+    $result = $bid->get_highest_bid($bid->itemID);
         
-        $bid_instance = array(
-            'highestPrice' => $highestPrice
-        );
-        // Push to "data"
-        array_push($bid_arr['data'], $bid_instance);
-    }
+    //Get row count
+    $num = $result->rowCount();
 
-    if ($bid_arr['data'][0]['highestPrice'] < $bid->amount) {
-        // Run insert query if price of bid is valid
-        if ($bid->create()) {
-            echo json_encode(
-                array('message' => 'Bid Created')
+    // Check if any result from getHighestBid helper function
+    if ($num > 0) {
+        // Items array
+        $bid_arr = array();
+        $bid_arr['data'] = array();
+
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+            
+            $bid_instance = array(
+                'highestPrice' => $highestPrice
             );
-        } else {
-            echo json_encode(
-                array('message' => 'Bid Not Created')
-            );
+            // Push to "data"
+            array_push($bid_arr['data'], $bid_instance);
         }
-    } else {
-        echo json_encode(
-            array('message' => 'Bid amount is too Low!')
-        );
-    }
 
-} else {
-    echo json_encode(
-        array('message' => 'No highestPrice Found')
-    );
-}
+        if ($bid_arr['data'][0]['highestPrice'] < $bid->amount) {
+            // Run insert query if price of bid is valid
+            if ($bid->create()) {
+                echo json_encode(
+                    array(
+                        "itemID" => $bid->itemID,
+                        "createdAt" => $bid->createdAt,
+                        "amount" => $bid->amount,
+                        "userID" => $bid->userID,
+                    )
+                );
+                $bid->update_highest_price($bid->itemID, $bid->bidID, $bid->amount);
+                $result = $bid->read_latest_bidID_itemID();
+                $BIDID = $result->fetch(PDO::FETCH_ASSOC)["bidID"];
+                $bid->set_bidID_items_table($BIDID, $bid->itemID);
+            } else {
+                echo json_encode(
+                    array()
+                );
+            }
+        } else {
+            http_response_code(400);
+        }
+
+    } else {
+        http_response_code(401);
+    }
