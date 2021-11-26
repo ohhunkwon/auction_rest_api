@@ -60,8 +60,6 @@
                 $items_arr
             );
         } else {
-            echo json_encode(
-                array('message' => "Reserve Price not met!")
-            );
+            header("HTTP/1.1 400 'Reserve price not met!'");
         }
     }

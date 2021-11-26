@@ -1,4 +1,6 @@
 <?php
+    // include('../../config/AuthCheck.php');
+    // session_start();
     // Headers
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
@@ -15,10 +17,10 @@
 
     // Get itemID from URL
     $bid->userID = isset($_GET['userID']) ? $_GET['userID'] : die();
+    // $bid->userID = intval($_SESSION['userID']);
 
-    // Get Category Item(s)
-    $result = $bid->read_user_bids();
-    
+    // Get Bids, User, Items
+    $result = $bid->read_bids();
     //Get row count
     $num = $result->rowCount();
 
@@ -30,24 +32,48 @@
         die();
     }
 
-    // Items array
+    // Bids array
     $bid_arr = array();
-    $bid_arr['data'] = array();
+    $bid_arr['bids'] = array();
+    $bid_arr['user'] = array();
+    $bid_arr['items'] = array();
+    $all_bid_IDs = array();
+
 
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
-        
-        $bid_instance = array(
-            'bidID' => $bidID,
-            'amount' => $amount,
-            'createdAt' => $createdAt,
-            'userID' => $userID,
-            'itemID' => $itemID
-        );
+
         // Push to "data"
-        array_push($bid_arr['data'], $bid_instance);
+        array_push($bid_arr['bids'], $row);
+        array_push($all_bid_IDs, $itemID);
     }
 
-    // Turn to JSON & output
-    echo json_encode($bid_arr);
 
+    $result_user = $bid->read_user();
+
+    while ($row = $result_user->fetch(PDO::FETCH_ASSOC)) {
+        extract($row);
+
+        // Push to "data"
+        array_push($bid_arr['user'], $row);
+        unset($bid_arr['user'][0]['pwhash']);
+    }
+
+    foreach ($all_bid_IDs as &$value) {
+        $bid->itemID = $value;
+        $result_items = $bid->read_items();
+
+        while ($row = $result_items->fetch(PDO::FETCH_ASSOC)) {
+    
+            extract($row);
+    
+            // Push to "data"
+            array_push($bid_arr['items'], $row);
+        }
+    }
+
+    echo json_encode(
+        $bid_arr
+    );
+
+    

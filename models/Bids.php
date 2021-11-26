@@ -232,25 +232,52 @@
   }
 
   // Get All Bids of Specific User
-  public function read_user_bids() {
+  public function read_bids() {
     // Create query
-    $query = 'SELECT 
-        *
-    FROM
-        ' . $this->bids_table . '
-    WHERE
-        userID = ?';
+    $query = 'SELECT * FROM Bids WHERE userID = :userID';
 
     // Prepare Statement
     $stmt = $this->conn->prepare($query);
 
     // Bind Category
-    $stmt->bindParam(1, $this->userID);
+    $stmt->bindParam(":userID", $this->userID);
 
     // Execute query
     $stmt->execute();
 
     return $stmt;
+}
+
+public function read_user() {
+  // Create query
+  $query = 'SELECT * FROM Users WHERE userID = :userID';
+
+  // Prepare Statement
+  $stmt = $this->conn->prepare($query);
+
+  // Bind Category
+  $stmt->bindParam(":userID", $this->userID);
+
+  // Execute query
+  $stmt->execute();
+
+  return $stmt;
+}
+
+public function read_items() {
+  // Create query
+  $query = 'SELECT * FROM Items WHERE itemID = :itemID';
+
+  // Prepare Statement
+  $stmt = $this->conn->prepare($query);
+
+  // Bind Category
+  $stmt->bindParam(":itemID", $this->itemID);
+
+  // Execute query
+  $stmt->execute();
+
+  return $stmt;
 }
 
 
