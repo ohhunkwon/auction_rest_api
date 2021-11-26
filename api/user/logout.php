@@ -19,8 +19,3 @@
         $_SESSION = array();
         session_destroy();
     }
-
-    // Redirect to login page
-    $indexURL = 'http://' . $_SERVER['HTTP_HOST'] .
-    dirname($_SERVER['PHP_SELF']) . '/index.php';
-    header('Location: ' . $indexURL);
