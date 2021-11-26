@@ -4,6 +4,7 @@
     private $conn;
     private $bids_table = 'Bids';
     private $items_table = 'Items';
+    private $users_table = 'Users';
 
 
     //bid properties
@@ -20,6 +21,26 @@
         $this->conn = $db;
     }
 
+    // Get user's role (Seller/Buyer)
+    public function get_user_role($USER_ID) {
+      $query = 'SELECT
+        u.role
+      FROM
+          ' . $this->users_table . ' u
+      WHERE userID = ?';
+
+      // Prepare Statement
+      $stmt = $this->conn->prepare($query);
+
+      // Bind ID
+      $stmt->bindParam(1, $USER_ID);
+
+      // Execute query
+      $stmt->execute();
+
+      return $stmt;
+  }
+    
     //Get bids
     public function read_latest_bid() {
         //create query  //modify!!!!!!!!!!!!!!!!!!
