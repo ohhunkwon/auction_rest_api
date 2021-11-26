@@ -4,6 +4,7 @@
         private $conn;
         private $users_table = 'Users';
         private $bids_table = 'Bids';
+        private $items_table = 'Items';
         private $watchlist_table = 'WatchList';
 
         // User Properties
@@ -85,6 +86,26 @@
             $query = 'SELECT *
             FROM
                 ' . $this->users_table .'
+            WHERE
+                userID = :userID';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind ID
+            $stmt->bindParam(':userID', $this->userID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        public function read_listings_by_seller() {
+            // Create query
+            $query = 'SELECT *
+            FROM
+                ' . $this->items_table .'
             WHERE
                 userID = :userID';
 
