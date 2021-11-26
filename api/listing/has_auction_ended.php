@@ -25,9 +25,5 @@
     $now = new DateTime();
 
     // Check if any items in listing
-    if ($now > $end_datetime) {
-        return true;
-
-    } else {
-        return false;
-    }
+    return $now > $end_datetime ? true : false;
+    

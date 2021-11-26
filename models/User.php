@@ -15,7 +15,6 @@
         public $role;
         public $createdAt;
         public $updatedAt;
-        public $confirmPW;
 
         // Constructor with DB
         public function __construct($db) {
@@ -27,21 +26,18 @@
             // Create query
             $query = 'INSERT INTO ' . $this->users_table . '
                 SET
-                    userID = :userID,
                     firstName = :firstName,
                     lastName = :lastName,
                     email = :email,
                     role = :role,
                     createdAt = :createdAt,
                     updatedAt = :updatedAt,
-                    pwhash = :pwhash
-            ';
+                    pwhash = :pwhash';
 
             //Prepare Statement
             $stmt = $this->conn->prepare($query);
         
             // Clean Data
-            $this->userID = htmlspecialchars(strip_tags($this->userID));
             $this->email = htmlspecialchars(strip_tags($this->email));
             $this->pwhash = htmlspecialchars(strip_tags($this->pwhash));
             $this->firstName = htmlspecialchars(strip_tags($this->firstName));
@@ -54,7 +50,6 @@
             $this->pwhash = password_hash($this->pwhash, PASSWORD_DEFAULT);
             
             // Bind Data
-            $stmt->bindParam(':userID', $this->userID);
             $stmt->bindParam(':email', $this->email);
             $stmt->bindParam(':pwhash', $this->pwhash);
             $stmt->bindParam(':firstName', $this->firstName);
@@ -69,16 +64,30 @@
             return $stmt;
         }
 
+        public function read_user() {
+            // Create query
+            $query = 'SELECT *
+            FROM
+                ' . $this->users_table .'
+            WHERE
+                userID = :userID';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind ID
+            $stmt->bindParam(':userID', $this->userID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
         // Login user
         public function select_user() {
             // Create query
-            $query = "SELECT 
-                    u.userID,
-                    u.pwhash
-                FROM
-                    ' . $this->users_table . ' u
-                WHERE u.userID = ?
-            ";
+            $query = 'SELECT u.userID, u.pwhash FROM ' . $this->users_table . ' u WHERE u.userID = ?';
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);
@@ -94,28 +103,20 @@
 
         public function user_login() {
             // Create query
-            $query = 'SELECT 
-                userID,
-                pwhash    
-            FROM
-               ' . $this->users_table . '
-            WHERE
-                userID = :userID
-            ';
+            $query = 'SELECT * FROM ' . $this->users_table . ' WHERE email = :email';
 
             //Prepare Statement
             $stmt = $this->conn->prepare($query);
         
             // Clean Data
-            $this->userID = htmlspecialchars(strip_tags($this->userID));
+            $this->email = htmlspecialchars(strip_tags($this->email));
 
             // Bind Data
-            $stmt->bindParam(':userID', $this->userID);
+            $stmt->bindParam(':email', $this->email);
 
             // Execute query
             $stmt->execute();
 
             return $stmt;
-
         }
     }

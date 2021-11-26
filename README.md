@@ -257,3 +257,35 @@ Res: e.g.
         }
     ]
 }
+
+4. User
+
+- read.php
+e.g. http://localhost:8888/auction_rest_api/api/user/read.php?userID=2
+response: {
+    "data": [
+        {
+            "firstName": "Jane",
+            "lastName": "Doe",
+            "email": "janedoe@gmail.com",
+            "role": "Seller",
+            "createdAt": "2021-10-22 07:47:02",
+            "updatedAt": "2021-10-22 06:44:34"
+        }
+    ]
+}
+
+- register.php
+e.g. {
+    "email": "ohhunkwon@hotmail",
+    "password": "12345",
+    "confirmPassword": "12345",
+    "firstName": "Ohhun",
+    "lastName": "Kwon",
+    "role": "Seller",
+    "createdAt": "2021-11-22 07:47:02",
+    "updatedAt": "2021-11-22 07:47:02"
+}
+response: {
+    "message": "User Created"
+}

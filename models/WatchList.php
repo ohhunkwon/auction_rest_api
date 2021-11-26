@@ -4,10 +4,23 @@
         private $conn;
         private $watch_table = 'Watchlist';
         private $user_table = 'Users';
+        private $item_table = 'Items';
 
         // Item Properties
         public $itemID;
+        public $title;
         public $userID;
+        public $description;
+        public $category;
+        public $startDateTime;
+        public $endDateTime;
+        public $startingPrice;
+        public $reservePrice;
+        public $latestBidID;
+        public $image;
+        public $firstName;
+        public $input;
+        public $highestPrice;
 
         // Constructor with DB
         public function __construct($db) {
@@ -17,11 +30,19 @@
         // Get Watchlist of specific User
         public function read() {
             $query = 'SELECT 
-                Watchlist.itemID,
-                Users.userID
-            FROM
-                ' . $this->watch_table . '
-            INNER JOIN ' . $this->user_table . ' ON Users.userID = Watchlist.userID AND Users.userID = ?';
+                Items.itemID,
+                Items.title,
+                Items.userID,
+                Items.startDateTime,
+                Items.reservePrice,
+                Items.description,
+                Items.category,
+                Items.endDateTime,
+                Items.startingPrice,
+                Items.bidID,
+                Items.image
+            FROM ' . $this->item_table . ' 
+            INNER JOIN ' . $this->watch_table . ' ON  Items.itemID = Watchlist.itemID and Watchlist.userID = ?';
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);
