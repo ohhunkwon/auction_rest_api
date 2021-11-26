@@ -22,6 +22,12 @@
     //Get row count
     $num = $result->rowCount();
 
+    if ($num == 0) {
+        echo json_encode(
+            array('winner' => "No Winner")
+        );
+    }
+
     // Check if any items in listing
     if ($num > 0) {
 
