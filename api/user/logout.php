@@ -1,5 +1,4 @@
 <?php
-    include('../../config/AuthCheck.php');
     // session must start before headers
     session_start();
     // Headers
@@ -8,7 +7,6 @@
     include_once '../../models/User.php';
 
     // Close session
-    if (isset($_SESSION['userID'])) {
+
         $_SESSION = array();
         session_destroy();
-    }

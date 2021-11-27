@@ -1,5 +1,4 @@
 <?php
-    session_start();
     // Headers
     include('../../config/Cors.php');
     include_once '../../config/Database.php';
@@ -13,7 +12,7 @@
     $user = new User($db);
 
     // Get itemID from URL
-    $user->userID = intval($_SESSION['userID']);
+    $user->userID = isset($_GET['userID']) ? $_GET['userID'] : die();
 
     // Listing items query
     $result = $user->read_user();
