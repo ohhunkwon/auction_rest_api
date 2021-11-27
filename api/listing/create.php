@@ -28,7 +28,6 @@
     $item->endDateTime = $data->endDateTime;
     $item->image = $data->image;
     $item->userID = $data->userID;
-    $item->highestPrice = $data->highestPrice;
 
     // Create listing item
     if ($item->create()) {

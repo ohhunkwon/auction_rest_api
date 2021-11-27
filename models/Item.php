@@ -140,8 +140,7 @@
                     startDateTime = :startDateTime,
                     endDateTime = :endDateTime,
                     image = :image,
-                    userID = :userID,
-                    highestPrice = :highestPrice
+                    userID = :userID
 
             ';
 
@@ -158,7 +157,6 @@
             $this->endDateTime = htmlspecialchars(strip_tags($this->endDateTime));
             $this->image = htmlspecialchars(strip_tags($this->image));
             $this->userID = htmlspecialchars(strip_tags($this->userID));
-            $this->highestPrice = htmlspecialchars(strip_tags($this->highestPrice));
 
             // Bind Data
             $stmt->bindParam(':title', $this->title);
@@ -170,7 +168,6 @@
             $stmt->bindParam(':endDateTime', $this->endDateTime);
             $stmt->bindParam(':image', $this->image);
             $stmt->bindParam(':userID', $this->userID);
-            $stmt->bindParam(':highestPrice', $this->highestPrice);
 
             // Execute query
             if ($stmt->execute()) {
