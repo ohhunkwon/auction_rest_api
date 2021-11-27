@@ -117,4 +117,21 @@
 
             return false;
         }
+
+        public function check_unique_item($ITEMID, $USERID) {
+            // Create query
+            $query = 'SELECT * FROM ' . $this->watch_table . ' WHERE itemID = ? AND userID = ?';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind ID
+            $stmt->bindParam(1, $ITEMID);
+            $stmt->bindParam(2, $USERID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
     }
