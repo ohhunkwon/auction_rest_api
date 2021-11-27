@@ -1,11 +1,6 @@
 <?php
     class Database {
         // DB Params
-        private $host = '';
-        private $port = '3306';
-        private $db_name = 'auction_rest_api';
-        private $username = 'root';
-        private $password = 'root';
         private $conn;
 
         // DB Connect

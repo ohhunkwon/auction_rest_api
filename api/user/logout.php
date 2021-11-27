@@ -7,7 +7,6 @@
     include_once '../../models/User.php';
 
     // Close session
-    if (isset($_SESSION['userID'])) {
+
         $_SESSION = array();
         session_destroy();
-    }
