@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Nov 26, 2021 at 04:08 PM
+-- Generation Time: Nov 27, 2021 at 07:05 PM
 -- Server version: 5.7.34
 -- PHP Version: 7.4.21
 
@@ -62,7 +62,14 @@ INSERT INTO `Bids` (`bidID`, `createdAt`, `amount`, `userID`, `itemID`) VALUES
 (20, '2021-10-22 07:01:07', '1500', 3, 12),
 (21, '2021-10-22 07:01:07', '1501', 3, 12),
 (22, '2021-10-22 07:01:07', '1505', 3, 12),
-(23, '2021-10-22 07:01:07', '1600', 3, 13);
+(23, '2021-10-22 07:01:07', '1600', 3, 13),
+(24, '2021-11-27 07:01:07', '50', 3, 19),
+(25, '2021-11-27 07:01:07', '55', 3, 19),
+(26, '2021-10-22 07:01:07', '60', 16, 19),
+(27, '2021-10-22 07:01:07', '30', 16, 18),
+(28, '2021-10-22 07:01:07', '40', 16, 17),
+(29, '2021-10-22 07:01:07', '100', 16, 20),
+(30, '2021-10-22 07:01:07', '200', 16, 20);
 
 -- --------------------------------------------------------
 
@@ -82,7 +89,7 @@ CREATE TABLE `Items` (
   `image` varchar(255) NOT NULL,
   `userID` int(11) NOT NULL,
   `bidID` int(11) DEFAULT NULL,
-  `highestPrice` int(11) NOT NULL
+  `highestPrice` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -95,7 +102,12 @@ INSERT INTO `Items` (`itemID`, `title`, `description`, `category`, `startingPric
 (13, 'Macbook Pro 2018', 'adsafvs da sa', 'Electronics', '700', '850', '2021-10-22 07:02:29', '2021-10-29 08:02:30', 'image.jpeg', 4, 23, 1600),
 (14, 'Tennis Racket', 'asdfnnja jkva vv', 'Sports', '15', '20', '2021-10-23 10:00:00', '2021-10-29 08:00:30', 'image.jpg', 2, 3, 1100),
 (16, 'Rare £1 Coin', 'adsadssda', 'Collectibles', '300', '450', '2021-10-25 10:00:00', '2021-11-10 10:00:00', 'image.jpg', 1, 5, 1000),
-(17, 'Nike shoes', 'asdfnsdasdaa adjkva vv', 'Sports', '15', '20', '2021-10-23 10:00:00', '2021-10-29 08:00:30', 'image.jpg', 3, NULL, 20);
+(17, 'Nike shoes', 'asdfnsdasdaa adjkva vv', 'Sports', '15', '20', '2021-10-23 10:00:00', '2021-10-29 08:00:30', 'image.jpg', 3, 28, 40),
+(18, 'Some Item 1.0', 'asdfnsdasdaa adjkva vv', 'Motors', '15', '20', '2021-10-23 10:00:00', '2021-10-29 08:00:30', 'image.jpg', 15, 27, 30),
+(19, 'Some Item 2.0', 'asdfnsdasdaa adjkva vv', 'Electronics', '25', '30', '2021-10-23 10:00:00', '2021-10-29 08:00:30', 'image.jpg', 15, 26, 60),
+(20, 'This is going to be bidded', 'asdfnsdasdaa adjkva vv', 'Sports', '15', '20', '2021-10-23 10:00:00', '2021-10-29 08:00:30', 'image.jpg', 15, 30, 200),
+(21, 'This is going to be bidded', 'asdfnsdasdaa adjkva vv', 'Sports', '15', '20', '2021-10-23 10:00:00', '2021-10-29 08:00:30', 'image.jpg', 15, NULL, 20),
+(22, 'Adidas shoes', 'asdfnsdasdaa adjkva vv', 'Sports', '25', '50', '2021-10-23 10:00:00', '2021-10-29 08:00:30', 'image.jpg', 15, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -126,7 +138,9 @@ INSERT INTO `Users` (`userID`, `firstName`, `lastName`, `email`, `role`, `create
 (5, 'Alex', 'Smith', 'alexsmith@gmail.com', 'Buyer', '2021-10-22 07:47:02', '2021-10-22 06:44:34', '5'),
 (6, 'Ohhun', 'Kwon', 'ohhunkwon@hotmail', 'Seller', '2021-11-22 07:47:02', '2021-11-22 07:47:02', '$2y$10$pFS1ATZUIyEiq8GVjT2G3ONd8Q/XLo7Kon7yJeuiQsM7/uGbTpoVq'),
 (9, 'asdadsa', 'dadsasda', 'janedoe1@gmail.com', 'Seller', '2021-11-22 07:47:02', '2021-11-22 07:47:02', '$2y$10$Rc5D8Y96zL45ljaZauQ8Uex7QkOmDceRqfs9NfBL6MMvIs4akACka'),
-(14, 'asdadsa', 'dadsasda', 'janedoe2@gmail.com', 'Seller', '2021-11-22 07:47:02', '2021-11-22 07:47:02', '$2y$10$2HrUtqw0YF34t4jv6uAAP.sus43rw.sLM5dSEdlsT1efU.ydeXvp6');
+(14, 'asdadsa', 'dadsasda', 'janedoe2@gmail.com', 'Seller', '2021-11-22 07:47:02', '2021-11-22 07:47:02', '$2y$10$2HrUtqw0YF34t4jv6uAAP.sus43rw.sLM5dSEdlsT1efU.ydeXvp6'),
+(15, 'Ohhun', 'Kwon', 'ohhunkwon@hotmail.com', 'Seller', '2021-11-22 07:47:02', '2021-11-22 07:47:02', '$2y$10$O1bwqPtW74/QUwH1lrg6jufUsIB.ftLU4y0MVSzkmY8o/VqYbmA3W'),
+(16, 'Ohhun', 'Kwon', 'buyer@hotmail', 'Buyer', '2021-11-27 07:47:02', '2021-11-27 07:47:02', '$2y$10$aSsHD074UY7Jq5AflUSP0ekmJBQWZPO8gHjJlAnoQwP/6JdEChE.C');
 
 -- --------------------------------------------------------
 
@@ -147,7 +161,8 @@ INSERT INTO `Watchlist` (`userID`, `itemID`) VALUES
 (5, 13),
 (4, 16),
 (1, 11),
-(4, 12);
+(4, 12),
+(3, 11);
 
 --
 -- Indexes for dumped tables
@@ -191,19 +206,19 @@ ALTER TABLE `Watchlist`
 -- AUTO_INCREMENT for table `Bids`
 --
 ALTER TABLE `Bids`
-  MODIFY `bidID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `bidID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `Items`
 --
 ALTER TABLE `Items`
-  MODIFY `itemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `itemID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables
