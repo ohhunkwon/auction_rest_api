@@ -1,5 +1,5 @@
 <?php
-    class WatchList {
+    class Watchlist {
         // DB stuff
         private $conn;
         private $watch_table = 'Watchlist';
