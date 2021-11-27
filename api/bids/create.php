@@ -1,7 +1,10 @@
 <?php
     session_start();
     // Headers
-    include('../../config/Cors.php');
+    header('Access-Control-Allow-Origin: *');
+    header('Content-Type: application/json');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
+    header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
     include_once '../../config/Database.php';
     include_once '../../models/Bids.php';
 
