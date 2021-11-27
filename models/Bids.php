@@ -239,7 +239,8 @@
           Items.category, Items.startingPrice, Items.reservePrice, Items.startDateTime, Items.endDateTime, Items.image, 
           Items.userID, Items.bidID, Items.highestPrice
           FROM Bids, Items
-          WHERE Bids.itemID = Items.itemID AND Bids.userID = :userID';
+          WHERE Bids.itemID = Items.itemID AND Bids.userID = :userID
+          ORDER BY createdAt DESC';
 
     // Prepare Statement
     $stmt = $this->conn->prepare($query);
@@ -291,7 +292,7 @@ public function read_items() {
     $query = 'SELECT 
         Bids.bidID, Bids.createdAt, Bids.amount, Bids.userID, Bids.itemID, Users.firstName, Users.lastName 
               FROM Bids, Users 
-              WHERE Bids.itemID = :itemID
+              WHERE Bids.itemID = :itemID and Bids.userID = Users.userID 
               ORDER BY createdAt DESC';
 
     // Prepare Statement
