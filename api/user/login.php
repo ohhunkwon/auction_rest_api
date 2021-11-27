@@ -1,5 +1,4 @@
 <?php
-    session_start();
     // Headers
     include_once '../../config/Cors.php';
     include_once '../../config/Database.php';
@@ -32,7 +31,9 @@
         );
         die();
     }
-
+    
+    session_set_cookie_params(time() + 34000, '/', getenv('ORIGIN_URL'), false, true);
+    session_start();
     // Check if any user in Users
     $userResult = $result->fetch(PDO::FETCH_ASSOC);
     if (password_verify($data->password, $userResult['pwhash'])) {
