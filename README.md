@@ -11,7 +11,6 @@ Request: e.g.
     "userID": "1",
     "itemID": "11",
     "amount": "1000",
-    "bidID": "30",
     "createdAt": "2021-10-22 07:01:07"
 }
 

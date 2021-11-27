@@ -22,7 +22,6 @@
     $bid->itemID = $data->itemID;
     $bid->createdAt = $data->createdAt;
     $bid->amount = $data->amount;
-    $bid->bidID = $data->bidID;
     $bid->userID = $data->userID;
 
     // Check if user creating bid is Buyer, not Seller
