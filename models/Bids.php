@@ -234,7 +234,13 @@
   // Get All Bids of Specific User
   public function read_bids() {
     // Create query
-    $query = 'SELECT * FROM Bids WHERE userID = :userID';
+    $query = 'SELECT 
+          Bids.bidID, Bids.createdAt, Bids.amount, Bids.userID, Bids.itemID, Items.title, Items.description,
+          Items.category, Items.startingPrice, Items.reservePrice, Items.startDateTime, Items.endDateTime, Items.image, 
+          Items.userID, Items.bidID, Items.highestPrice
+          FROM Bids, Items
+          WHERE Bids.itemID = Items.itemID AND Bids.userID = :userID
+          ORDER BY createdAt DESC';
 
     // Prepare Statement
     $stmt = $this->conn->prepare($query);
@@ -283,7 +289,11 @@ public function read_items() {
   // Get All Bids of Specific Item
   public function read_bids_item() {
     // Create query
-    $query = 'SELECT * FROM Bids WHERE itemID = :itemID ORDER BY createdAt DESC';
+    $query = 'SELECT 
+        Bids.bidID, Bids.createdAt, Bids.amount, Bids.userID, Bids.itemID, Users.firstName, Users.lastName 
+              FROM Bids, Users 
+              WHERE Bids.itemID = :itemID and Bids.userID = Users.userID 
+              ORDER BY createdAt DESC';
 
     // Prepare Statement
     $stmt = $this->conn->prepare($query);

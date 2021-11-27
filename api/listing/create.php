@@ -2,10 +2,13 @@
     // Headers
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: POST');
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, 
-            Access-Control-Allow-Methods, Authorization, X-Requested-With');
-
+    header('Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS');
+    header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        // The request is using the POST method
+        header("HTTP/1.1 200 OK");
+        return;
+    }
     include_once '../../config/Database.php';
     include_once '../../models/Item.php';
 
@@ -28,7 +31,6 @@
     $item->endDateTime = $data->endDateTime;
     $item->image = $data->image;
     $item->userID = $data->userID;
-    $item->highestPrice = $data->highestPrice;
 
     // Create listing item
     if ($item->create()) {

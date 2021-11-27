@@ -43,7 +43,6 @@
                 'reservePrice' => $reservePrice,
                 'latestBidID' => $bidID,
                 'image' => $image,
-                'search_input' => $input
             );
 
             // Push to "data"

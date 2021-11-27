@@ -23,6 +23,13 @@
     // Get raw posted data
     $data = json_decode(file_get_contents("php://input"));
 
+    $check_duplicate = $watchlist->check_unique_item($data->itemID, $data->userID);
+
+    if ($check_duplicate->rowCount() == 1) {
+        http_response_code(400);
+        die();
+    }
+
     $watchlist->itemID = $data->itemID;
     $watchlist->userID = $data->userID;
 
