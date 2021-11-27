@@ -1,5 +1,4 @@
 <?php
-    session_start();
     // Headers
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
@@ -15,8 +14,8 @@
     $bid = new Bids($db);
 
     // Get itemID from URL
-    // $bid->itemID = isset($_GET['itemID']) ? $_GET['itemID'] : die();
-    $bid->userID = intval($_SESSION['userID']);
+    $bid->itemID = isset($_GET['itemID']) ? $_GET['itemID'] : die();
+    // $bid->userID = intval($_SESSION['userID']);
 
     // Get Bids, User, Items
     $result = $bid->read_bids_item() ;
