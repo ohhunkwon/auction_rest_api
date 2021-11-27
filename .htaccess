@@ -1,2 +1,2 @@
-Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
-Header set Access-Control-Allow-Methods "GET, POST, PUT"
+Header add Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+Header add Access-Control-Allow-Methods "GET, POST, PUT"
