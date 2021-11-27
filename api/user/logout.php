@@ -1,5 +1,4 @@
 <?php
-    include('../../config/AuthCheck.php');
     // session must start before headers
     session_start();
     // Headers

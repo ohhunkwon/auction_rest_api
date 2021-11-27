@@ -291,7 +291,7 @@ public function read_items() {
     $query = 'SELECT 
         Bids.bidID, Bids.createdAt, Bids.amount, Bids.userID, Bids.itemID, Users.firstName, Users.lastName 
               FROM Bids, Users 
-              WHERE Bids.itemID = :itemID and Bids.userID = Users.userID 
+              WHERE Bids.itemID = :itemID
               ORDER BY createdAt DESC';
 
     // Prepare Statement

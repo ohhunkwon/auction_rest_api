@@ -1,5 +1,4 @@
 <?php
-    include('../../config/AuthCheck.php');
     session_start();
     // Headers
     include('../../config/Cors.php');
@@ -13,27 +12,9 @@
     // Instantiate User object
     $user = new User($db);
 
-    // Use session to verify User is logged in
-    if (isset($_SESSION['userID'])) {
-    // Show User listings (only if role == seller)
-    // $query =  
-        $user->userID = intval($_SESSION['userID']); 
-    } else {
-        // don't redirect - just throw back a 401 unauthorized ---> DONE!
-        http_response_code(401);
-
-        // echo "Please login";
-        // Redirect to login page
-        // $loginURL = 'http://' . $_SERVER['HTTP_HOST'] .
-        // dirname($_SERVER['PHP_SELF']) . '/login.php';
-        // header('Location: ' . $loginURL);
-    }
-
-
     // Get itemID from URL
-    //$user->userID = isset($_GET['userID']) ? $_GET['userID'] : die();
+    $user->userID = isset($_GET['userID']) ? $_GET['userID'] : die();
     
-
     // Get users, User, Items
     $result = $user->read_listings_by_seller();
     //Get row count

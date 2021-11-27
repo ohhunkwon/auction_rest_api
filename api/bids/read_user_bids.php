@@ -1,5 +1,4 @@
 <?php
-    include('../../config/AuthCheck.php');
     session_start();
     // Headers
     header('Access-Control-Allow-Origin: *');
@@ -16,8 +15,7 @@
     $bid = new Bids($db);
 
     // Get itemID from URL
-    //$bid->userID = isset($_GET['userID']) ? $_GET['userID'] : die();
-    $bid->userID = intval($_SESSION['userID']);
+    $bid->userID = isset($_GET['userID']) ? $_GET['userID'] : die();
 
     // Get Bids, User, Items
     $result = $bid->read_bids();
