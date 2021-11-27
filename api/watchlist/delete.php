@@ -10,7 +10,7 @@
         return;
     }
     include_once '../../config/Database.php';
-    include_once '../../models/Watchlist.php';
+    include_once '../../models/WatchList.php';
 
     // Instantiate DB & connect
     $database = new Database();
