@@ -1,11 +1,7 @@
 <?php
+    session_start();
     // Headers
-    header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
-    header('Access-Control-Allow-Methods: POST');
-    header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, 
-            Access-Control-Allow-Methods, Authorization, X-Requested-With');
-
+    include('../../config/Cors.php');
     include_once '../../config/Database.php';
     include_once '../../models/Bids.php';
 
@@ -22,7 +18,6 @@
     $bid->itemID = $data->itemID;
     $bid->createdAt = $data->createdAt;
     $bid->amount = $data->amount;
-    $bid->bidID = $data->bidID;
     $bid->userID = $data->userID;
 
     // Check if user creating bid is Buyer, not Seller
