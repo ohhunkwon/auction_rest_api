@@ -1,2 +1,4 @@
+Header set Access-Control-Allow-Origin "https://comp0178-db-fe.vercel.app"
+Header set Access-Control-Allow-Credentials "true"
 Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
 Header set Access-Control-Allow-Methods "GET, POST, PUT"
