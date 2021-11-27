@@ -141,7 +141,6 @@
                     endDateTime = :endDateTime,
                     image = :image,
                     userID = :userID
-
             ';
 
             //Prepare Statement
