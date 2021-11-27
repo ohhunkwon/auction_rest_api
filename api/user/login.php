@@ -1,4 +1,6 @@
 <?php
+    session_set_cookie_params(0, '/', '.vercel.app');
+    session_start();
     // Headers
     include_once '../../config/Cors.php';
     include_once '../../config/Database.php';
@@ -27,13 +29,11 @@
     if ($result->rowCount() == 0) {
         http_response_code(400);
         echo json_encode(
-            array('message' => 'User/Email not fouund')
+            array('message' => 'User/Email not found')
         );
         die();
     }
     
-    session_set_cookie_params(time() + 34000, '/', getenv('ORIGIN_URL'), false, true);
-    session_start();
     // Check if any user in Users
     $userResult = $result->fetch(PDO::FETCH_ASSOC);
     if (password_verify($data->password, $userResult['pwhash'])) {
@@ -42,6 +42,7 @@
         unset($userResult['pwhash']);
         echo json_encode($userResult);
     } else {
+        http_response_code(401);
         echo json_encode(
             array('message' => 'Incorrect password!')
         );
