@@ -283,7 +283,11 @@ public function read_items() {
   // Get All Bids of Specific Item
   public function read_bids_item() {
     // Create query
-    $query = 'SELECT * FROM Bids WHERE itemID = :itemID ORDER BY createdAt DESC';
+    $query = 'SELECT 
+        Bids.bidID, Bids.createdAt, Bids.amount, Bids.userID, Bids.itemID, Users.firstName, Users.lastName 
+              FROM Bids, Users 
+              WHERE Bids.itemID = 20 and Bids.userID = Users.userID 
+              ORDER BY createdAt DESC';
 
     // Prepare Statement
     $stmt = $this->conn->prepare($query);

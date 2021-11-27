@@ -16,11 +16,11 @@
     $bid = new Bids($db);
 
     // Get itemID from URL
-    // $bid->itemID = isset($_GET['itemID']) ? $_GET['itemID'] : die();
+    $bid->itemID = isset($_GET['itemID']) ? $_GET['itemID'] : die();
     $bid->userID = intval($_SESSION['userID']);
 
     // Get Bids, User, Items
-    $result = $bid->read_bids_item() ;
+    $result = $bid->read_bids_item();
     //Get row count
     $num = $result->rowCount();
 
@@ -36,9 +36,9 @@
     $bid_arr = array();
     $bid_arr['data'] = array();
 
+    // Grab firstName, lastName, userID from userID
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
-
         // Push to "data"
         array_push($bid_arr['data'], $row);
     }
