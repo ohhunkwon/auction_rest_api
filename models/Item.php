@@ -23,6 +23,7 @@
         public $highestPrice;
         public $auctionStatus;
         public $winner;
+        public $lastName;
 
         // Constructor with DB
         public function __construct($db) {
@@ -369,7 +370,10 @@
         // Get userID of a particular Item's latest Bid
         public function read_user_latest_bid() {
             // Create query
-            $query = 'SELECT Bids.userID FROM Bids INNER JOIN Items ON Bids.bidID = Items.bidID AND Items.itemID = ?';
+            $query = 'SELECT Bids.userID, Users.firstName, Users.lastName 
+                FROM Bids 
+                INNER JOIN Users ON Bids.userID = Users.userID 
+                INNER JOIN Items ON Bids.bidID = Items.bidID AND Items.itemID = ?';
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);

@@ -28,10 +28,29 @@
 
     $result_1 = $user_select->fetch(PDO::FETCH_ASSOC);
     $item->userID = $result_1["userID"];
+    $item->firstName = $result_1["firstName"];
+    $item->lastName = $result_1["lastName"];
 
     // Set auctionStatus and set Winner only if auction has ended
     if ($now > $end_datetime) {
         $item->set_status_inactive_set_winner();
+        
+        $user_arr = array();
+        $user_arr['data'] = array();
+
+        $user_instance = array(
+            'userID' => $item->userID,
+            'firstName' => $item->firstName,
+            'lastName' => $item->lastName,
+        );
+
+        // Push to "data"
+        array_push($user_arr['data'], $user_instance);
+
+        echo json_encode(
+            $user_arr
+        );
+        
     } else {
         die();
     }
