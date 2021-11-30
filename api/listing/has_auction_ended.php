@@ -24,6 +24,17 @@
 
     $now = new DateTime();
 
-    // Check if any items in listing
-    return $now > $end_datetime ? true : false;
+    $user_select = $item->read_user_latest_bid();
+
+    $result_1 = $user_select->fetch(PDO::FETCH_ASSOC);
+    $item->userID = $result_1["userID"];
+
+    // Set auctionStatus and set Winner only if auction has ended
+    if ($now > $end_datetime) {
+        $item->set_status_inactive_set_winner();
+    } else {
+        die();
+    }
+
+    // return $now > $end_datetime ? true : false;
     

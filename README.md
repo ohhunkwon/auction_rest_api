@@ -232,6 +232,15 @@ Res: e.g.
     ]
 }
 
+OR 
+
+Req with param: http://localhost:8888/auction_rest_api/api/listing/read.php?status=active
+or http://localhost:8888/auction_rest_api/api/listing/read.php?status=inactive
+
+- read_won.php
+
+http://localhost:8888/auction_rest_api/api/listing/read_won.php?userID=16
+
 3. Watchlist
 
 - create.php

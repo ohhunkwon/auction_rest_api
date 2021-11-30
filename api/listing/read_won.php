@@ -11,16 +11,14 @@
     $db = $database->connect();
 
     // Instantiate Listing Item object
-    $item = new Item($db);
+    $items = new Item($db);
 
-    // Get itemID from URL
-    if (isset($_GET['status'])) {
-        $filterByStatus = $_GET['status'];
-    }
+    // Get search input from URL
+    $items->userID = isset($_GET['userID']) ? $_GET['userID'] : die();
 
-    // Listing items query
-    $result = $item->read();
-    
+    // Get search result Item(s)
+    $result = $items->read_won();
+
     //Get row count
     $num = $result->rowCount();
 
@@ -31,17 +29,10 @@
     if ($num == 0) {
         echo json_encode($items_arr);
         die();
-    } 
+    }
 
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
-
-        if (isset($_GET['status']) && 
-            ($filterByStatus == 'active' && $auctionStatus == 'inactive') || 
-            ($filterByStatus == 'inactive' && $auctionStatus == 'active') ||
-            ($auctionStatus === null)) {
-            continue;
-        }
 
         $item_instance = array(
             'itemID' => $itemID,
@@ -49,7 +40,6 @@
             'description' => html_entity_decode($description),
             'category' => $category,
             'userID' => $userID,
-            'seller' => $firstName,
             'startDateTime' => $startDateTime,
             'endDateTime' => $endDateTime,
             'startingPrice' => $startingPrice,
