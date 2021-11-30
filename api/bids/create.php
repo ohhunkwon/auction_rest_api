@@ -11,6 +11,7 @@
     }
     include_once '../../config/Database.php';
     include_once '../../models/Bids.php';
+    include_once '../../sendgrid/send_first_email.php';
 
     // Instantiate DB & connect
     $database = new Database();
@@ -70,10 +71,16 @@
                         "userID" => $bid->userID,
                     )
                 );
+    
+                $query_prev_userID = $bid->get_latest_bid_userID($bid->itemID);
+                $prevUserID = $query_prev_userID->fetch(PDO::FETCH_ASSOC)["userID"];
+
                 $bid->update_highest_price($bid->itemID, $bid->bidID, $bid->amount);
                 $result = $bid->read_latest_bidID_itemID();
                 $BIDID = $result->fetch(PDO::FETCH_ASSOC)["bidID"];
                 $bid->set_bidID_items_table($BIDID, $bid->itemID);
+            
+                emailFunction::send_outbid_email($prevUserID,$bid->itemID, $db);
             } else {
                 echo json_encode(
                     array()
