@@ -66,14 +66,14 @@ class emailFunction{
         return false;    
     }
 
-    public function send_email($name,$email,$item_title){
+    public static function send_email($name,$email_input,$item_title){
     
         $email = new \SendGrid\Mail\Mail(); 
         $email->setFrom("epay.notification.noreply@gmail.com", "epay Notification");
         $email->setSubject("You have been outbid!");
-        $email->addTo($email, $name);
+        $email->addTo($email_input, $name);
         
-        $body_message = "Hi, " . $name . "you have been outbid on " . $item_title;
+        $body_message = "Hi, " . $name . " you have been outbid on " . $item_title;
         
         $email->addContent("text/plain", $body_message);
         
@@ -83,9 +83,9 @@ class emailFunction{
         $sendgrid = new \SendGrid(SENDGRID_API_KEY);
         try {
             $response = $sendgrid->send($email);
-            print $response->statusCode() . "\n";
-            print_r($response->headers());
-            print $response->body() . "\n";
+            //print $response->statusCode() . "\n";
+            //print_r($response->headers());
+            //print $response->body() . "\n";
         } catch (Exception $e) {
             echo 'Caught exception: '. $e->getMessage() ."\n";
         }
