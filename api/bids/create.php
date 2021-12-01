@@ -80,7 +80,9 @@
                 $BIDID = $result->fetch(PDO::FETCH_ASSOC)["bidID"];
                 $bid->set_bidID_items_table($BIDID, $bid->itemID);
             
-                emailFunction::send_outbid_email($prevUserID,$bid->itemID, $db);
+                EmailFunction::send_outbid_email($prevUserID,$bid->itemID, $db);
+                EmailFunction::send_watchlist($currUserID,$bid->itemID, $db);
+                //I need to create a variable for curruserID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             } else {
                 echo json_encode(
                     array()
