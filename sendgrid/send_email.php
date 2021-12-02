@@ -10,7 +10,6 @@ class EmailFunction{
     public static function send_outbid_email($user_id,$item_id, $db){
 
         $conn = $db;
-        send_watchlist($user_id,$item_id, $db);
         #get name and email
         $query = self::get_name_email($user_id, $conn);
         $result = $query->fetch(PDO::FETCH_ASSOC);
@@ -94,11 +93,26 @@ class EmailFunction{
 
         #get list of users ids
         $query_watchlist = self::get_users_watchlist($item_id,$user_id,$conn);
-        $query_result = $query_watchlist->fetch(PDO::FETCH_ASSOC);
 
         //get the results of the query and put into the lidt called $query_result!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
-        $number_of_results = 0; //set to the number of results in the query!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        $users_arr = array();
+        $users_arr['data'] = array();
+
+        while ($row = $query_watchlist->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+
+            $user_instance = array(
+                'userID' => $userID
+            );
+
+            // Push to "data"
+            array_push($users_arr['data'], $user_instance);
+        }
+
+        // Turn to JSON & output
+        echo json_encode($users_arr);
+
+        $number_of_results = $query_watchlist->rowCount(); //set to the number of results in the query!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
@@ -111,8 +125,9 @@ class EmailFunction{
         #send message to everyone
         for($i = 0; $i < $number_of_results; $i++){
             
-            $curr_user_id = query_result[$i];//need to extract the current users id from the list!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            $curr_user_id = $users_arr["data"][$i]["userID"];//need to extract the current users id from the list!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+            echo json_encode($users_arr["data"][$i]["userID"]);
             #get name and email
             $query = self::get_name_email($curr_user_id, $conn);
             $result = $query->fetch(PDO::FETCH_ASSOC);

@@ -11,7 +11,7 @@
     }
     include_once '../../config/Database.php';
     include_once '../../models/Bids.php';
-    include_once '../../sendgrid/send_first_email.php';
+    include_once '../../sendgrid/send_email.php';
 
     // Instantiate DB & connect
     $database = new Database();
@@ -79,9 +79,9 @@
                 $result = $bid->read_latest_bidID_itemID();
                 $BIDID = $result->fetch(PDO::FETCH_ASSOC)["bidID"];
                 $bid->set_bidID_items_table($BIDID, $bid->itemID);
-            
+                
                 EmailFunction::send_outbid_email($prevUserID,$bid->itemID, $db);
-                EmailFunction::send_watchlist($currUserID,$bid->itemID, $db);
+                EmailFunction::send_watchlist($bid->userID,$bid->itemID, $db);
                 //I need to create a variable for curruserID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             } else {
                 echo json_encode(
