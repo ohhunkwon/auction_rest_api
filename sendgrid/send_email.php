@@ -21,8 +21,9 @@ class EmailFunction{
         $item_title = $data->fetch(PDO::FETCH_ASSOC)["title"];
 
         #send message
-        $message = " you have been outbid on ";
-        self::send_email($name,$email,$message,$item_title);
+        $message = " you have been outbid on " . $item_title;
+        $message_subject_line = "You have been outbid on " . $item_title . "!";
+        self::send_email($name,$email,$message_subject_line, $message,$item_title);
     }
 
     private static function get_name_email($user_id, $conn){
@@ -61,14 +62,14 @@ class EmailFunction{
         return $stmt;     
     }
 
-    private static function send_email($name,$email_input,$message,$item_title){
+    private static function send_email($name,$email_input,$message_subject_line,$message,$item_title){
 
         $email = new \SendGrid\Mail\Mail(); 
         $email->setFrom("epay.notification.noreply@gmail.com", "epay Notification");
-        $email->setSubject("You have been outbid!");
+        $email->setSubject($message_subject_line);
         $email->addTo($email_input, $name);
         
-        $body_message = "Hi, " . $name . $message . $item_title;
+        $body_message = "Hi " . $name . ", " . $message . ".";
         
         $email->addContent("text/plain", $body_message);
         
@@ -94,7 +95,6 @@ class EmailFunction{
         #get list of users ids
         $query_watchlist = self::get_users_watchlist($item_id,$user_id,$conn);
 
-        //get the results of the query and put into the lidt called $query_result!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         $users_arr = array();
         $users_arr['data'] = array();
 
@@ -112,29 +112,27 @@ class EmailFunction{
         // Turn to JSON & output
         echo json_encode($users_arr);
 
-        $number_of_results = $query_watchlist->rowCount(); //set to the number of results in the query!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
+        $number_of_results = $query_watchlist->rowCount();
 
         #get item title
         $data = self::get_item_name($item_id, $conn);
         $item_title = $data->fetch(PDO::FETCH_ASSOC)["title"];
 
-        $message = " a new bid has been placed on the item ";
+        $message = " a new bid has been placed on the item " . $item_title;
+        $message_subject_line = "New bid on your watchlist item " . $item_title . "!";
         
         #send message to everyone
         for($i = 0; $i < $number_of_results; $i++){
             
-            $curr_user_id = $users_arr["data"][$i]["userID"];//need to extract the current users id from the list!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-            echo json_encode($users_arr["data"][$i]["userID"]);
+            $curr_user_id = $users_arr["data"][$i]["userID"];
+            
             #get name and email
             $query = self::get_name_email($curr_user_id, $conn);
             $result = $query->fetch(PDO::FETCH_ASSOC);
             $name =  $result["firstName"];
             $email = $result["email"];
 
-            self::send_email($name,$email,$message,$item_title);
+            self::send_email($name,$email,$message_subject_line,$message,$item_title);
         }
     }
 
