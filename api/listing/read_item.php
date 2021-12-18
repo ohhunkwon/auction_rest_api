@@ -45,9 +45,9 @@
     $user_select = $item->read_user_latest_bid();
 
     $result_1 = $user_select->fetch(PDO::FETCH_ASSOC);
-    $item->userID = $result_1["userID"];
-    $item->firstName = $result_1["firstName"];
-    $item->lastName = $result_1["lastName"];
+    $item->userID = $result_1["userID"] ?? '';
+    $item->firstName = $result_1["firstName"] ?? '';
+    $item->lastName = $result_1["lastName"] ?? '';
 
     // Set auctionStatus and set Winner only if auction has ended
     if ($now > $end_datetime) {
