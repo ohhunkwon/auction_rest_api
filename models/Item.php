@@ -21,6 +21,9 @@
         public $firstName;
         public $input;
         public $highestPrice;
+        public $auctionStatus;
+        public $winner;
+        public $lastName;
 
         // Constructor with DB
         public function __construct($db) {
@@ -42,7 +45,9 @@
                 i.endDateTime,
                 i.startingPrice,
                 i.bidID,
-                i.image
+                i.image,
+                i.auctionStatus,
+                i.winner
             FROM
                 ' . $this->items_table . ' i, ' . $this->users_table . ' u
             WHERE
@@ -419,13 +424,12 @@
             $stmt = $this->conn->prepare($query);
 
             // Bind Category
-            $stmt->bindParam(1, $userID);
-        
+            $stmt->bindParam(1, $this->userID);
+            $stmt->bindParam(2, $this->itemID);
+
             // Execute query
             $stmt->execute();
 
             return $stmt;
         }
-
-
     }
