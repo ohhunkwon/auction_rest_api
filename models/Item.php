@@ -21,6 +21,9 @@
         public $firstName;
         public $input;
         public $highestPrice;
+        public $auctionStatus;
+        public $winner;
+        public $lastName;
 
         // Constructor with DB
         public function __construct($db) {
@@ -42,7 +45,9 @@
                 i.endDateTime,
                 i.startingPrice,
                 i.bidID,
-                i.image
+                i.image,
+                i.auctionStatus,
+                i.winner
             FROM
                 ' . $this->items_table . ' i, ' . $this->users_table . ' u
             WHERE
@@ -333,6 +338,68 @@
 
             // Bind ID
             $stmt->bindParam(1, $this->itemID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        // Get Items of that a User has Won
+        public function read_won() {
+            // Create query
+            $query = 'SELECT 
+                *
+            FROM
+                ' . $this->items_table . '
+            WHERE 
+                winner = ?';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind Category
+            $stmt->bindParam(1, $this->userID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        // Get userID of a particular Item's latest Bid
+        public function read_user_latest_bid() {
+            // Create query
+            $query = 'SELECT Bids.userID, Users.firstName, Users.lastName 
+                FROM Bids 
+                INNER JOIN Users ON Bids.userID = Users.userID 
+                INNER JOIN Items ON Bids.bidID = Items.bidID AND Items.itemID = ?';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind Category
+            $stmt->bindParam(1, $this->itemID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        // Set auctionStatus to inactive and update winner to userID 
+        public function set_status_inactive_set_winner() {
+            // Create query
+            $query = "UPDATE Items
+                SET auctionStatus = 'inactive', winner = ?
+                WHERE itemID = ?";
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind Category
+            $stmt->bindParam(1, $this->userID);
+            $stmt->bindParam(2, $this->itemID);
 
             // Execute query
             $stmt->execute();

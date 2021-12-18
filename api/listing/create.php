@@ -22,6 +22,18 @@
     // Get raw posted data
     $data = json_decode(file_get_contents("php://input"));
 
+    // check if listing price is 0 or less which should be invalid!
+    if ($data->startingPrice < 0 || $data->reservePrice < 0) {
+        http_response_code(400);
+        die();
+    }
+
+    // check if reserve price is not higher than starting price, which is also invalid!
+    if ($data->startingPrice > $data->reservePrice) {
+        http_response_code(400);
+        die();
+    }
+
     $item->title = $data->title;
     $item->description = $data->description;
     $item->category = $data->category;
