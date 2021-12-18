@@ -470,4 +470,27 @@
 
             return $stmt;
         }
+
+        // Get Items of that a User has Won
+        public function read_won() {
+            // Create query
+            $query = 'SELECT 
+                *
+            FROM
+                ' . $this->items_table . '
+            WHERE 
+                winner = ?';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind Category
+            $stmt->bindParam(1, $this->userID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
     }
