@@ -425,7 +425,45 @@
 
             // Bind Category
             $stmt->bindParam(1, $this->userID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        public function set_status_inactive_set_winner() {
+            // Create query
+            $query = "UPDATE Items
+                SET auctionStatus = 'inactive', winner = ?
+                WHERE itemID = ?";
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind Category
+            $stmt->bindParam(1, $this->userID);
             $stmt->bindParam(2, $this->itemID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        // Get userID of a particular Item's latest Bid
+        public function read_user_latest_bid() {
+            // Create query
+            $query = 'SELECT Bids.userID, Users.firstName, Users.lastName 
+                FROM Bids 
+                INNER JOIN Users ON Bids.userID = Users.userID 
+                INNER JOIN Items ON Bids.bidID = Items.bidID AND Items.itemID = ?';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind Category
+            $stmt->bindParam(1, $this->itemID);
 
             // Execute query
             $stmt->execute();
