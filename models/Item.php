@@ -345,21 +345,105 @@
             return $stmt;
         }
 
-        // Get Items of that a User has Won
-        public function read_won() {
+        // Get Items of that match a specific search query
+        public function read_recommendations($itemID, $IdToRecommend, $db) {
             // Create query
-            $query = 'SELECT 
-                *
-            FROM
-                ' . $this->items_table . '
-            WHERE 
-                winner = ?';
+            
+            $query = 'SELECT * FROM Items INNER JOIN Bids ON Bids.itemID = Items.itemID WHERE ';
+
+            $word_searched = "";//The original term that the user is searching for, to be used for throwing back an error
+            
+            $list_of_userIDs = self::get_list_of_user_ids($itemID, $IdToRecommend, $db);
+
+            foreach ($list_of_userIDs as $userID){
+
+                $query .= "Bids.userID = " . $userID['userID'] . " OR "; 
+                $word_searched .= $userID. ' ';
+            }
+
+            $query = substr_replace($query, "", -4);
+            $word_searched = substr_replace($word_searched, "", -1);
+
+            $query .= ' AND Items.itemID NOT IN (:itemID) LIMIT 0, 5';
+
+            if (empty($list_of_userIDs)) {
+                $query = 'SELECT * FROM Items INNER JOIN Bids ON Bids.itemID = Items.itemID LIMIT 0,0';
+            }
+            
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+            
+            // Bind ID
+            $stmt->bindParam(":itemID", $itemID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        // Gets userId lists who bidded on that same item except for original user
+        private static function get_list_of_user_ids($itemID, $userID, $db) {
+            // Create query
+            $query = 'SELECT DISTINCT(userID) FROM Bids WHERE itemID = :itemID AND userID NOT IN (:userID)';
+
+            // Prepare Statement
+            $stmt = $db->prepare($query);
+            
+            // Bind Category
+            $stmt->bindParam(":userID", $userID);
+            $stmt->bindParam(":itemID", $itemID);
+        
+            // Execute query
+            $stmt->execute();
+
+
+            $userIDs_arr = array();
+            $userIDs_arr['data'] = array();
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                extract($row);
+
+                $userID_instance = array(
+                    'userID' => $userID
+                );
+
+                // Push to "data"
+                array_push($userIDs_arr['data'], $userID_instance);
+            }
+
+            return $userIDs_arr['data'];
+        }
+
+        // Get Items of that match a specific search query
+        public function get_all_bidded_items($userID) {
+            // Create query
+            $query = 'SELECT DISTINCT(itemID) From Bids WHERE userID = ?'; 
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);
 
             // Bind Category
             $stmt->bindParam(1, $this->userID);
+
+            // Execute query
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        public function set_status_inactive_set_winner() {
+            // Create query
+            $query = "UPDATE Items
+                SET auctionStatus = 'inactive', winner = ?
+                WHERE itemID = ?";
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Bind Category
+            $stmt->bindParam(1, $this->userID);
+            $stmt->bindParam(2, $this->itemID);
 
             // Execute query
             $stmt->execute();
@@ -387,23 +471,26 @@
             return $stmt;
         }
 
-        // Set auctionStatus to inactive and update winner to userID 
-        public function set_status_inactive_set_winner() {
+        // Get Items of that a User has Won
+        public function read_won() {
             // Create query
-            $query = "UPDATE Items
-                SET auctionStatus = 'inactive', winner = ?
-                WHERE itemID = ?";
+            $query = 'SELECT 
+                *
+            FROM
+                ' . $this->items_table . '
+            WHERE 
+                winner = ?';
 
             // Prepare Statement
             $stmt = $this->conn->prepare($query);
 
             // Bind Category
             $stmt->bindParam(1, $this->userID);
-            $stmt->bindParam(2, $this->itemID);
 
             // Execute query
             $stmt->execute();
 
             return $stmt;
         }
+
     }
