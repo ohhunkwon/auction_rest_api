@@ -92,11 +92,11 @@
       public function get_latest_bid_userID($item_id) {
         //create query
         $query = 'SELECT
-          b.userID
+          Bids.userID
         FROM
             ' . $this->bids_table . '
-        INNER JOIN $
-        WHERE itemID = ?';
+        INNER JOIN Items ON Items.bidID = Bids.bidID
+        WHERE Items.itemID = ?';
   
         // Prepare Statement
         $stmt = $this->conn->prepare($query);
