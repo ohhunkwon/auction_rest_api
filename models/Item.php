@@ -416,7 +416,7 @@
         }
 
         // Get Items of that match a specific search query
-        public function get_all_bidded_items($userID) {
+        public function get_all_bidded_items($USERID) {
             // Create query
             $query = 'SELECT DISTINCT(itemID) From Bids WHERE userID = ?'; 
 
@@ -424,7 +424,7 @@
             $stmt = $this->conn->prepare($query);
 
             // Bind Category
-            $stmt->bindParam(1, $this->userID);
+            $stmt->bindParam(1, $USERID);
 
             // Execute query
             $stmt->execute();
